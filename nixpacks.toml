@@ -1,0 +1,11 @@
+[phases.setup]
+nixPkgs = ["...", "nodejs"]
+
+[phases.install]
+cmds = ["cd audit-app && npm install"]
+
+[phases.build]
+cmds = ["cd audit-app && npm install"]
+
+[start]
+cmd = "cd audit-app && node server.js"
