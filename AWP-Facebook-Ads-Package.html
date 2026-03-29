@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AWP Brand Audit — Facebook Ads Package</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C4982E; --gold-light: #E0B44C; --gold-dark: #A67B1B;
+    --navy: #1E2B3C; --navy-light: #2D3E55; --navy-dark: #121B27;
+    --white: #FFFFFF; --warm-gray: #F5F2EE;
+    --slate-200: #E2E8F0; --slate-400: #94A3B8; --slate-500: #64748B;
+    --green: #16a34a; --red: #dc2626; --amber: #b45309;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#F5F2EE; color:var(--navy); font-family:'DM Sans',sans-serif; font-size:15px; line-height:1.6; }
+  h1,h2,h3,h4 { font-family:'Barlow Condensed',sans-serif; text-transform:uppercase; font-weight:800; line-height:1.1; }
+
+  .doc-header {
+    background:linear-gradient(135deg,#121B27 0%,#1E2B3C 100%);
+    border-bottom:3px solid var(--gold);
+    padding:3rem 2rem;
+    text-align:center;
+  }
+  .doc-header h1 { font-size:3rem; color:#fff; margin-bottom:0.5rem; }
+  .doc-header h1 span { color:var(--gold); }
+  .doc-header p { color:var(--slate-400); font-size:1rem; }
+  .doc-header .meta { display:flex; justify-content:center; gap:2rem; margin-top:1.5rem; flex-wrap:wrap; }
+  .doc-header .meta-item { font-family:'Barlow Condensed',sans-serif; font-size:0.8rem; letter-spacing:0.15em; color:var(--gold-light); text-transform:uppercase; }
+
+  .page { max-width:960px; margin:0 auto; padding:3rem 2rem 5rem; }
+
+  .section { margin-bottom:3.5rem; }
+  .section-header {
+    display:flex; align-items:center; gap:1rem;
+    margin-bottom:1.75rem; padding-bottom:0.75rem;
+    border-bottom:2px solid rgba(196,152,46,0.3);
+  }
+  .section-num {
+    background:var(--gold); color:var(--navy-dark);
+    font-family:'Barlow Condensed',sans-serif; font-size:1rem; font-weight:900;
+    width:32px; height:32px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .section-title { font-size:1.8rem; color:var(--navy); letter-spacing:0.04em; }
+
+  /* CARDS */
+  .card {
+    background:#fff; border:1px solid var(--slate-200);
+    border-radius:12px; padding:1.75rem;
+    box-shadow:0 1px 4px rgba(0,0,0,0.06);
+    margin-bottom:1.25rem;
+  }
+  .card-title {
+    font-family:'Barlow Condensed',sans-serif; font-size:1.1rem;
+    letter-spacing:0.08em; color:var(--navy);
+    text-transform:uppercase; margin-bottom:1rem;
+    display:flex; align-items:center; gap:0.6rem;
+  }
+  .card-title .dot { width:8px; height:8px; border-radius:50%; background:var(--gold); flex-shrink:0; }
+
+  /* TAG */
+  .tag {
+    display:inline-block;
+    font-family:'Barlow Condensed',sans-serif; font-size:0.68rem;
+    letter-spacing:0.12em; text-transform:uppercase; font-weight:800;
+    padding:0.2rem 0.7rem; border-radius:50px;
+  }
+  .tag-gold { background:rgba(196,152,46,0.12); border:1px solid rgba(196,152,46,0.4); color:var(--gold-dark); }
+  .tag-navy { background:rgba(30,43,60,0.08); border:1px solid rgba(30,43,60,0.2); color:var(--navy); }
+  .tag-green { background:#dcfce7; border:1px solid #bbf7d0; color:var(--green); }
+  .tag-red { background:#fee2e2; border:1px solid #fecaca; color:var(--red); }
+  .tag-amber { background:#fef3c7; border:1px solid #fde68a; color:var(--amber); }
+
+  /* TWO COL */
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; }
+  .three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1.25rem; }
+  @media(max-width:640px) { .two-col,.three-col { grid-template-columns:1fr; } }
+
+  /* AD COPY */
+  .ad-block {
+    background:#fff; border:1px solid var(--slate-200);
+    border-radius:12px; overflow:hidden;
+    box-shadow:0 1px 4px rgba(0,0,0,0.06);
+    margin-bottom:2rem;
+  }
+  .ad-block-header {
+    background:var(--navy); padding:1rem 1.5rem;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .ad-block-header h3 { font-size:1.1rem; color:#fff; letter-spacing:0.06em; }
+  .ad-body { padding:1.5rem; }
+  .ad-field { margin-bottom:1.25rem; }
+  .ad-field:last-child { margin-bottom:0; }
+  .ad-label {
+    font-family:'Barlow Condensed',sans-serif; font-size:0.72rem;
+    letter-spacing:0.18em; text-transform:uppercase; color:var(--slate-400);
+    margin-bottom:0.4rem; font-weight:800;
+  }
+  .ad-text {
+    background:var(--warm-gray); border:1px solid var(--slate-200);
+    border-radius:8px; padding:1rem 1.1rem;
+    font-size:0.92rem; color:var(--navy); line-height:1.65;
+    white-space:pre-wrap;
+  }
+  .ad-text.headline {
+    font-family:'Barlow Condensed',sans-serif; font-size:1.3rem;
+    font-weight:800; letter-spacing:0.03em; line-height:1.2;
+  }
+  .ad-text.description { font-size:0.88rem; color:var(--slate-500); }
+
+  /* TARGETING TABLE */
+  table { width:100%; border-collapse:collapse; }
+  th {
+    font-family:'Barlow Condensed',sans-serif; font-size:0.72rem;
+    letter-spacing:0.15em; text-transform:uppercase; color:var(--slate-500);
+    padding:0.7rem 1rem; background:#F1F5F9; border-bottom:2px solid var(--slate-200);
+    text-align:left;
+  }
+  td {
+    padding:0.85rem 1rem; border-bottom:1px solid #F1F5F9;
+    font-size:0.9rem; color:var(--navy); background:#fff; vertical-align:top;
+  }
+  td.label { font-weight:700; width:28%; color:var(--navy); }
+
+  /* IMPROVEMENT */
+  .improve-item {
+    display:flex; align-items:flex-start; gap:1rem;
+    padding:1.1rem 1.25rem;
+    background:#fff; border:1px solid var(--slate-200);
+    border-radius:10px; margin-bottom:0.85rem;
+    box-shadow:0 1px 3px rgba(0,0,0,0.04);
+  }
+  .improve-icon { font-size:1.3rem; flex-shrink:0; line-height:1; padding-top:0.1rem; }
+  .improve-label { font-weight:700; font-size:0.9rem; color:var(--navy); margin-bottom:0.25rem; }
+  .improve-desc { font-size:0.87rem; color:var(--slate-500); line-height:1.55; }
+  .improve-fix {
+    margin-top:0.5rem; font-size:0.84rem; color:var(--green);
+    font-weight:600; padding:0.35rem 0.75rem;
+    background:#dcfce7; border-radius:6px; display:inline-block;
+  }
+
+  /* CREATIVE */
+  .creative-card {
+    background:#fff; border:1px solid var(--slate-200); border-radius:12px;
+    overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,0.06); margin-bottom:1.25rem;
+  }
+  .creative-header {
+    padding:0.9rem 1.25rem; background:rgba(196,152,46,0.08);
+    border-bottom:1px solid rgba(196,152,46,0.2);
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .creative-header h4 { font-size:1rem; color:var(--navy); letter-spacing:0.05em; }
+  .creative-body { padding:1.25rem 1.5rem; }
+  .creative-body p { font-size:0.9rem; color:var(--slate-500); margin-bottom:0.6rem; line-height:1.6; }
+  .creative-body p:last-child { margin-bottom:0; }
+  .creative-body strong { color:var(--navy); }
+
+  /* BUDGET */
+  .budget-row {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0.85rem 1rem; border-bottom:1px solid #F1F5F9;
+  }
+  .budget-row:last-child { border-bottom:none; }
+  .budget-label { font-size:0.9rem; color:var(--slate-500); }
+  .budget-val { font-family:'Barlow Condensed',sans-serif; font-size:1.2rem; font-weight:900; color:var(--navy); }
+
+  /* NOTE BOX */
+  .note {
+    background:rgba(196,152,46,0.07); border:1px solid rgba(196,152,46,0.3);
+    border-left:4px solid var(--gold); border-radius:8px;
+    padding:1rem 1.25rem; margin-top:1.25rem;
+    font-size:0.88rem; color:var(--navy); line-height:1.55;
+  }
+  .note strong { color:var(--gold-dark); }
+
+  /* PHASE BADGE */
+  .phase {
+    display:inline-flex; align-items:center; gap:0.5rem;
+    background:var(--navy-dark); color:#fff;
+    font-family:'Barlow Condensed',sans-serif; font-size:0.75rem;
+    letter-spacing:0.1em; text-transform:uppercase; font-weight:800;
+    padding:0.3rem 0.8rem; border-radius:50px;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="doc-header">
+  <h1>AWP Brand Audit<br><span>Facebook Ads Package</span></h1>
+  <p>Brand Presence Audit Tool — Small Business Owner Campaign</p>
+  <div class="meta">
+    <div class="meta-item">All Ways Posted</div>
+    <div class="meta-item">Target: Small Business Owners</div>
+    <div class="meta-item">Prepared: March 2026</div>
+    <div class="meta-item">Offer: Free Brand Presence Audit</div>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 1: CAMPAIGN STRUCTURE
+  ═══════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <h2 class="section-title">Campaign Structure</h2>
+    </div>
+
+    <div class="two-col" style="margin-bottom:1.25rem;">
+      <div class="card">
+        <div class="card-title"><div class="dot"></div>Campaign Objective</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:2rem;color:var(--navy);font-weight:900;margin-bottom:0.5rem;">TRAFFIC</div>
+        <div style="font-size:0.88rem;color:var(--slate-500);line-height:1.6;">
+          Drive clicks to the audit URL. The form IS the lead capture — don't use Facebook Lead Ads here because that bypasses the audit experience and kills the "instant report on your screen" hook. Traffic to URL preserves the full conversion flow.
+        </div>
+        <div class="note"><strong>Destination URL:</strong> <a href="https://www.aiweaponstoolkit.com/audit" style="color:var(--gold-dark);font-weight:700;">www.aiweaponstoolkit.com/audit</a></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="dot"></div>Budget & Schedule</div>
+        <div style="background:var(--warm-gray);border-radius:10px;overflow:hidden;border:1px solid var(--slate-200);">
+          <div class="budget-row">
+            <span class="budget-label">Starting daily budget</span>
+            <span class="budget-val">$15–$20/day</span>
+          </div>
+          <div class="budget-row">
+            <span class="budget-label">Learning phase (let it run)</span>
+            <span class="budget-val">7–10 days</span>
+          </div>
+          <div class="budget-row">
+            <span class="budget-label">Optimization event</span>
+            <span class="budget-val">Link clicks</span>
+          </div>
+          <div class="budget-row">
+            <span class="budget-label">Schedule</span>
+            <span class="budget-val">All day / No end date</span>
+          </div>
+          <div class="budget-row">
+            <span class="budget-label">Bidding</span>
+            <span class="budget-val">Lowest cost</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="dot"></div>Audience Targeting</div>
+      <div style="border-radius:8px;overflow:hidden;border:1px solid var(--slate-200);">
+        <table>
+          <thead><tr>
+            <th>Setting</th>
+            <th>Recommendation</th>
+            <th>Notes</th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td class="label">Locations</td>
+              <td>United States</td>
+              <td style="font-size:0.85rem;color:var(--slate-500);">Start US only. Expand to Canada/AU/NZ later — the audit tool supports those markets.</td>
+            </tr>
+            <tr>
+              <td class="label">Age Range</td>
+              <td>30–60</td>
+              <td style="font-size:0.85rem;color:var(--slate-500);">Under 30 skews toward employees. Over 60 drops off on FB. This window captures the decision-maker.</td>
+            </tr>
+            <tr>
+              <td class="label">Gender</td>
+              <td>All</td>
+              <td style="font-size:0.85rem;color:var(--slate-500);">No reason to exclude either. Let the data tell you what converts.</td>
+            </tr>
+            <tr>
+              <td class="label">Detailed Targeting — Interests</td>
+              <td>Small business · Entrepreneurship · Local business · Self-employment · Business owner</td>
+              <td style="font-size:0.85rem;color:var(--slate-500);">Use Advantage+ audience expansion after the first 7 days once you have click data.</td>
+            </tr>
+            <tr>
+              <td class="label">Detailed Targeting — Behaviors</td>
+              <td>Small business owners (Facebook category) · Engaged shoppers (exclude)</td>
+              <td style="font-size:0.85rem;color:var(--slate-500);">FB has a "Small business owners" behavior category. Use it. Exclude engaged shoppers — they're consumers, not business owners.</td>
+            </tr>
+            <tr>
+              <td class="label">Placements</td>
+              <td>Facebook Feed + Instagram Feed + Facebook Reels</td>
+              <td style="font-size:0.85rem;color:var(--slate-500);">Start manual placements. Facebook Feed will carry the most volume. Reels can work if you create video. Turn off Audience Network and Messenger.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="dot"></div>Campaign Structure at a Glance</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;">
+        <div style="background:var(--warm-gray);border-radius:8px;padding:1rem;">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;letter-spacing:0.15em;color:var(--gold-dark);text-transform:uppercase;margin-bottom:0.5rem;">Campaign Level</div>
+          <div style="font-size:0.9rem;color:var(--navy);font-weight:600;">AWP — Brand Audit</div>
+          <div style="font-size:0.82rem;color:var(--slate-500);margin-top:0.25rem;">Objective: Traffic<br>Budget: $20/day</div>
+        </div>
+        <div style="background:var(--warm-gray);border-radius:8px;padding:1rem;">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;letter-spacing:0.15em;color:var(--gold-dark);text-transform:uppercase;margin-bottom:0.5rem;">Ad Set Level</div>
+          <div style="font-size:0.9rem;color:var(--navy);font-weight:600;">Small Business Owners — US</div>
+          <div style="font-size:0.82rem;color:var(--slate-500);margin-top:0.25rem;">Age 30–60, interests + behaviors<br>Manual placements</div>
+        </div>
+        <div style="background:var(--warm-gray);border-radius:8px;padding:1rem;">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;letter-spacing:0.15em;color:var(--gold-dark);text-transform:uppercase;margin-bottom:0.5rem;">Ad Level</div>
+          <div style="font-size:0.9rem;color:var(--navy);font-weight:600;">3 ad variations</div>
+          <div style="font-size:0.82rem;color:var(--slate-500);margin-top:0.25rem;">Run all 3 simultaneously<br>Kill losers after 7 days</div>
+        </div>
+      </div>
+      <div class="note"><strong>Pro tip:</strong> Run all three ad variations in the same ad set. Facebook will automatically allocate more spend to what performs. After 7 days, kill the two lowest CTR ads and double down on the winner.</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 2: AD COPY
+  ═══════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <h2 class="section-title">Ad Copy — 3 Variations</h2>
+    </div>
+
+    <p style="font-size:0.9rem;color:var(--slate-500);margin-bottom:1.75rem;max-width:680px;">Each variation leads with a different hook — pain point, curiosity, and direct positioning. Run all three. Primary text is written for mobile (short paragraphs, no em dashes, no fluff). All three drive to the same audit URL.</p>
+
+    <!-- AD 1 -->
+    <div class="ad-block">
+      <div class="ad-block-header">
+        <h3>AD 1 — Pain Point Hook</h3>
+        <span class="tag" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;letter-spacing:0.1em;">Best for cold audiences</span>
+      </div>
+      <div class="ad-body">
+        <div class="ad-field">
+          <div class="ad-label">Primary Text</div>
+          <div class="ad-text">Your Facebook page hasn't been updated in three weeks.
+
+Your website has no meta description — so Google is writing your search snippet for you.
+
+Your Instagram profile links to a page that doesn't exist anymore.
+
+You don't know any of this because nobody told you.
+
+We built a free tool that checks all of it in under 2 minutes.
+
+Enter your website URL. Get your full brand presence report — live on your screen, instantly. No login. No paid tools. No sales call. Just your grade and exactly what to fix.
+
+It's free. Takes 2 minutes. See where you stand.</div>
+        </div>
+        <div class="two-col">
+          <div class="ad-field">
+            <div class="ad-label">Headline (1–5 words, punchy)</div>
+            <div class="ad-text headline">What grade does your business get online?</div>
+          </div>
+          <div class="ad-field">
+            <div class="ad-label">Description (below headline)</div>
+            <div class="ad-text description">Free brand audit. Instant report. No strings.</div>
+          </div>
+        </div>
+        <div class="ad-field">
+          <div class="ad-label">Call to Action Button</div>
+          <div class="ad-text" style="display:inline-block;padding:0.5rem 1.25rem;">Learn More</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AD 2 -->
+    <div class="ad-block">
+      <div class="ad-block-header">
+        <h3>AD 2 — Curiosity / Grade Hook</h3>
+        <span class="tag" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;letter-spacing:0.1em;">Highest click potential</span>
+      </div>
+      <div class="ad-body">
+        <div class="ad-field">
+          <div class="ad-label">Primary Text</div>
+          <div class="ad-text">We audited 100 small business websites.
+
+78% had a broken or missing meta description.
+61% had no schema markup — meaning Google had no idea what the business actually does.
+44% had social profiles not linked from their own website.
+
+Most owners had no idea.
+
+We built a free tool that scans your website, checks your Google visibility signals, and audits all your social profiles in about 90 seconds.
+
+You get a full letter-grade report — delivered to your screen instantly. Prioritized fix list included.
+
+Free. No card. No call. Just your score.</div>
+        </div>
+        <div class="two-col">
+          <div class="ad-field">
+            <div class="ad-label">Headline</div>
+            <div class="ad-text headline">What's your brand presence score?</div>
+          </div>
+          <div class="ad-field">
+            <div class="ad-label">Description</div>
+            <div class="ad-text description">Website health + social audit. Done in 90 seconds. Free.</div>
+          </div>
+        </div>
+        <div class="ad-field">
+          <div class="ad-label">Call to Action Button</div>
+          <div class="ad-text" style="display:inline-block;padding:0.5rem 1.25rem;">Learn More</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AD 3 -->
+    <div class="ad-block">
+      <div class="ad-block-header">
+        <h3>AD 3 — Direct Positioning Hook</h3>
+        <span class="tag" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;letter-spacing:0.1em;">Best for warm/retargeting</span>
+      </div>
+      <div class="ad-body">
+        <div class="ad-field">
+          <div class="ad-label">Primary Text</div>
+          <div class="ad-text">Quick question: when someone Googles your business — what do they actually find?
+
+Is your website showing a clean title and description? Are your social profiles active and linked? Does your homepage have the signals Google uses to trust you?
+
+Most small business owners have no idea.
+
+All Ways Posted built a free brand presence audit that checks your website, your social media, and your Google visibility in under 2 minutes.
+
+You get a full report with your letter grade across 5 categories: website health, social presence, content structure, Google visibility, and brand consistency.
+
+Enter your URL. See your score. Know exactly what to fix. It takes 2 minutes and it's completely free.</div>
+        </div>
+        <div class="two-col">
+          <div class="ad-field">
+            <div class="ad-label">Headline</div>
+            <div class="ad-text headline">Free brand audit — see how you look online</div>
+          </div>
+          <div class="ad-field">
+            <div class="ad-label">Description</div>
+            <div class="ad-text description">Instant report. No credit card. No pitch.</div>
+          </div>
+        </div>
+        <div class="ad-field">
+          <div class="ad-label">Call to Action Button</div>
+          <div class="ad-text" style="display:inline-block;padding:0.5rem 1.25rem;">Learn More</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note"><strong>Headline character limits:</strong> Facebook headlines truncate at ~27 characters on mobile feed. "What grade does your business get online?" is 41 chars — Facebook will show the first ~27 and cut off, but the hook is front-loaded. Consider testing a shorter version: "What grade does your biz get?" as Variant 1B.</div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 3: CREATIVE DIRECTION
+  ═══════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <h2 class="section-title">Creative Direction</h2>
+    </div>
+
+    <p style="font-size:0.9rem;color:var(--slate-500);margin-bottom:1.75rem;max-width:680px;">The audit tool already has strong visual branding (navy/gold, letter grades, clean report layout). Lean into that in the creative. The "report card" format is instantly recognizable and creates curiosity. Three creative formats below — start with the static image, add video when you can.</p>
+
+    <!-- CREATIVE 1 -->
+    <div class="creative-card">
+      <div class="creative-header">
+        <h4>Creative Option 1 — Static Image (Start Here)</h4>
+        <span class="tag tag-green">Recommended First</span>
+      </div>
+      <div class="creative-body">
+        <p><strong>Concept:</strong> A mockup of the audit report — specifically the scorecard section showing letter grades (A, C+, B, F) across the 5 categories. The image makes the product tangible before the click.</p>
+        <p><strong>Background:</strong> Navy dark (#121B27) with a subtle gold radial glow.</p>
+        <p><strong>Main visual:</strong> The score breakdown card from the report — big letter grade center left (e.g. "C+" in amber), five category bars with grades. Looks like an actual report someone received.</p>
+        <p><strong>Text overlay (top):</strong> "YOUR BUSINESS JUST GOT GRADED" in Barlow Condensed white, all caps, 40px+.</p>
+        <p><strong>Text overlay (bottom):</strong> "Find out your score — free, instant, no login." in smaller white text.</p>
+        <p><strong>AWP logo:</strong> Bottom right corner, small.</p>
+        <p><strong>Size:</strong> 1080x1080 (square, works across feed and stories). Also export 1200x628 for link preview.</p>
+        <p><strong>Tool to build it:</strong> Use Genspark or Canva. Export the actual report HTML as a screenshot and mock it inside the creative frame — more authentic than illustration.</p>
+      </div>
+    </div>
+
+    <!-- CREATIVE 2 -->
+    <div class="creative-card">
+      <div class="creative-header">
+        <h4>Creative Option 2 — Video (15–30 sec)</h4>
+        <span class="tag tag-amber">Add Week 2</span>
+      </div>
+      <div class="creative-body">
+        <p><strong>Hook (0–3 sec):</strong> Text on screen, large: "Does your business pass or fail this test?" — no voiceover needed, captions carry it.</p>
+        <p><strong>Middle (3–18 sec):</strong> Screen recording of the audit intake form being filled out for a real local business (use a demo URL). Show the 3-step form moving quickly, then the loading animation, then the report appearing on screen with the letter grade revealed.</p>
+        <p><strong>End frame (18–28 sec):</strong> Static frame on navy background — "Free Brand Presence Audit" + "allwaysposted.com" + AWP logo. Text: "Takes 2 minutes. 100% free."</p>
+        <p><strong>Captions:</strong> Auto-generate in Meta's ad creator. 85% of video ads are watched on mute.</p>
+        <p><strong>Aspect ratio:</strong> 9:16 for Reels and Stories; 1:1 for feed. Record in 9:16, crop to square.</p>
+        <p><strong>Tone:</strong> Clean, no music needed — the report reveal is the hook. Keep it under 30 seconds.</p>
+      </div>
+    </div>
+
+    <!-- CREATIVE 3 -->
+    <div class="creative-card">
+      <div class="creative-header">
+        <h4>Creative Option 3 — Carousel (Pain Points)</h4>
+        <span class="tag tag-navy">Test Week 3+</span>
+      </div>
+      <div class="creative-body">
+        <p><strong>Concept:</strong> Each card = one common brand presence failure. Builds urgency by showing the problems one at a time before the CTA card.</p>
+        <p><strong>Card 1:</strong> Navy bg + gold text — "Your Google search snippet is being written by an algorithm right now." Sub: "No meta description = no control."</p>
+        <p><strong>Card 2:</strong> "Your website has no sitemap. Google is finding your pages on its own." Sub: "That means some pages aren't indexed at all."</p>
+        <p><strong>Card 3:</strong> "Your social profiles aren't linked from your own website." Sub: "You're making customers go find you."</p>
+        <p><strong>Card 4:</strong> "Your Open Graph title reads 'Home.'" Sub: "Every time your URL gets shared, that's what people see."</p>
+        <p><strong>Card 5 (CTA):</strong> Gold bg + navy text — "Find out what's broken. Free brand audit. Takes 2 minutes." + AWP logo.</p>
+        <p><strong>Design note:</strong> Keep each card minimal — one bold statement, one supporting line. All uppercase headlines using Barlow Condensed or similar compressed font.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 4: LANDING PAGE REVIEW
+  ═══════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <h2 class="section-title">Landing Page Review</h2>
+    </div>
+
+    <div class="card" style="margin-bottom:1.5rem;">
+      <div class="card-title"><div class="dot"></div>Overall Assessment</div>
+      <p style="font-size:0.92rem;color:var(--slate-500);line-height:1.65;">The intake form is clean, well-branded, and low-friction. Three-step flow is smart — it progressively reveals fields instead of dumping everything on one screen. The design matches the report, which builds trust. The loading animation with progress steps is a nice touch. There are five specific things to fix before running paid traffic.</p>
+    </div>
+
+    <div class="improve-item">
+      <div class="improve-icon">⚠️</div>
+      <div>
+        <div class="improve-label">No trust signal at the email field</div>
+        <div class="improve-desc">Step 3 asks for email but has no anti-spam language. Cold traffic is skeptical. When you're sending someone from a Facebook ad to an unknown brand and asking for their email, you need to kill the hesitation right there on the form.</div>
+        <div class="improve-fix">Fix: Add "No spam. Your report arrives on screen instantly." as a sub-label or hint under the email input field.</div>
+      </div>
+    </div>
+
+    <div class="improve-item">
+      <div class="improve-icon">🔴</div>
+      <div>
+        <div class="improve-label">Success state copy is wrong for the actual UX</div>
+        <div class="improve-desc">The success state says "Your Report Is On Its Way — Check your inbox in the next few minutes." But the code actually redirects to the report URL on screen within 800ms of completion. The email is the backup, not the primary delivery. This creates confusion — user thinks they need to go check email but the report is already showing.</div>
+        <div class="improve-fix">Fix: Change success copy to "Your report is loading now — redirecting you in a moment." Or just let the redirect happen and remove the success state entirely.</div>
+      </div>
+    </div>
+
+    <div class="improve-item">
+      <div class="improve-icon">⚡</div>
+      <div>
+        <div class="improve-label">Hero copy doesn't say "instant on-screen" clearly enough</div>
+        <div class="improve-desc">The hero currently says "generate a full live report." The word "live" does some work but "instant, on your screen" is the hook that separates this from every other form that says "we'll email you something." That instant gratification is the conversion driver and it should be louder.</div>
+        <div class="improve-fix">Fix: Update hero body to: "We'll analyze your website and social media presence, then show you a full report — live on your screen in about 90 seconds. No email required. No waiting."</div>
+      </div>
+    </div>
+
+    <div class="improve-item">
+      <div class="improve-icon">💡</div>
+      <div>
+        <div class="improve-label">Step 2 social handles have no placeholder examples</div>
+        <div class="improve-desc">The social handle inputs have no placeholder text. Some small business owners won't know what a "handle" is or what format to use. A simple placeholder like "@yourbusiness" or "facebook.com/yourbusiness" removes that micro-friction.</div>
+        <div class="improve-fix">Fix: Add placeholder="e.g. @yourbusiness" to each social input field.</div>
+      </div>
+    </div>
+
+    <div class="improve-item">
+      <div class="improve-icon">🏆</div>
+      <div>
+        <div class="improve-label">No social proof anywhere on the page</div>
+        <div class="improve-desc">Cold traffic from Facebook ads hits a page from a brand they've never heard of and is asked to enter their business URL and email. There's nothing on the page that says anyone else has used this, trusts it, or found it useful. Even one testimonial or a "Used by 200+ businesses" statement would help.</div>
+        <div class="improve-fix">Fix: After you've run 10–20 audits, add a single testimonial quote just above the form, or a "Trusted by 500 small businesses" line in the hero.</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:1.5rem;border-left:3px solid var(--green);">
+      <div class="card-title"><div class="dot" style="background:var(--green);"></div>What's Working — Don't Touch</div>
+      <ul style="font-size:0.9rem;color:var(--slate-500);padding-left:1.25rem;line-height:2;">
+        <li>Three-step flow keeps it from feeling like a long form</li>
+        <li>"What You're Getting" box on Step 3 is strong — it handles objections right before submission</li>
+        <li>The gold submit button with "Run My Free Audit 🚀" is a solid CTA</li>
+        <li>Loading animation with the progress checklist keeps users from bouncing during the crawl</li>
+        <li>The "Free · No Paid Tools · Generated Instantly" tag at the top of the hero is excellent</li>
+        <li>Mobile responsive layout looks clean</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 5: LAUNCH SEQUENCE
+  ═══════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <h2 class="section-title">Launch Sequence</h2>
+    </div>
+
+    <div class="three-col">
+      <div class="card">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;letter-spacing:0.15em;color:var(--gold-dark);text-transform:uppercase;margin-bottom:0.6rem;">Before You Launch</div>
+        <ul style="font-size:0.88rem;color:var(--slate-500);padding-left:1.1rem;line-height:1.9;">
+          <li>Deploy the audit app and confirm it works end-to-end</li>
+          <li>Apply the 5 landing page fixes above</li>
+          <li>Set up the Google Sheets webhook for lead capture</li>
+          <li>Configure the email sender (SendGrid recommended)</li>
+          <li>Test the full form flow from a mobile device</li>
+          <li>Set up Facebook Pixel on the audit page</li>
+          <li>Create a "Thank You" conversion event on report view</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;letter-spacing:0.15em;color:var(--gold-dark);text-transform:uppercase;margin-bottom:0.6rem;">Days 1–7 (Learning Phase)</div>
+        <ul style="font-size:0.88rem;color:var(--slate-500);padding-left:1.1rem;line-height:1.9;">
+          <li>Launch all 3 ad variations simultaneously</li>
+          <li>Set budget at $15/day, don't touch it</li>
+          <li>Do not edit the ad set — it resets the learning phase</li>
+          <li>Monitor CTR and cost per click daily</li>
+          <li>Track how many people complete the form (not just click)</li>
+          <li>Expect CPCs of $0.80–$2.50 for this audience</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;letter-spacing:0.15em;color:var(--gold-dark);text-transform:uppercase;margin-bottom:0.6rem;">Days 8–30 (Optimize)</div>
+        <ul style="font-size:0.88rem;color:var(--slate-500);padding-left:1.1rem;line-height:1.9;">
+          <li>Kill the two lowest-CTR ad variations</li>
+          <li>Double budget on the winner: $30–$40/day</li>
+          <li>Test a second ad set with Advantage+ audience</li>
+          <li>Build a retargeting campaign for page visitors who didn't submit</li>
+          <li>If video is ready, launch the Reels ad</li>
+          <li>Add a lookalike audience based on form completers</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note"><strong>Key metric to watch:</strong> Form completion rate (people who submit vs. people who click the ad). If it drops below 20%, the landing page has a friction problem. If CTR on the ad is below 0.8%, the creative or copy needs to change — not the targeting.</div>
+  </div>
+
+</div>
+
+<div style="background:var(--navy-dark);border-top:3px solid var(--gold);padding:2rem;text-align:center;">
+  <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.8rem;letter-spacing:0.2em;color:var(--slate-400);text-transform:uppercase;">All Ways Posted &nbsp;·&nbsp; allwaysposted.com &nbsp;·&nbsp; We post. That's it.</div>
+</div>
+
+</body>
+</html>

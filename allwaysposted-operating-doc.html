@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>All Ways Posted — Operating Document v1.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+
+/* ═══════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════ */
+:root {
+  --gold:       #b88e52;
+  --gold-light: #d1b184;
+  --gold-dark:  #94703a;
+  --gold-dim:   rgba(184,142,82,0.10);
+  --gold-dim2:  rgba(184,142,82,0.05);
+  --navy:       #1a2332;
+  --navy-light: #242d3d;
+  --body:       #e2e8f0;
+  --muted:      #94a3b8;
+  --border:     #334155;
+  --bg:         #0f172a;
+  --white:      #ffffff;
+  --green:      #22c55e;
+  --red:        #ef4444;
+
+  --font-display: 'Barlow Condensed', sans-serif;
+  --font-body:    'DM Sans', sans-serif;
+  --font-mono:    'Space Mono', monospace;
+
+  --radius: 0px;
+  --gap:    14px;
+  --pad:    40px;
+}
+
+/* ═══════════════════════════════════════
+   RESET
+═══════════════════════════════════════ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--navy);
+  color: var(--body);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ═══════════════════════════════════════
+   TOP BAR
+═══════════════════════════════════════ */
+.topbar {
+  background: var(--navy);
+  height: 54px;
+  padding: 0 var(--pad);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid rgba(0,180,160,0.15);
+}
+.topbar__brand {
+  font-family: var(--font-display);
+  font-size: 21px;
+  font-weight: 800;
+  color: var(--gold);
+  letter-spacing: 0.04em;
+}
+.topbar__label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.28);
+}
+.topbar__status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--green);
+}
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: blink 2s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.35} }
+
+/* ═══════════════════════════════════════
+   NAV TABS
+═══════════════════════════════════════ */
+.nav {
+  background: var(--navy-light);
+  border-bottom: 2px solid var(--border);
+  padding: 0 var(--pad);
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+}
+.nav__tab {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 13px 20px;
+  cursor: pointer;
+  color: var(--muted);
+  border: none;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  background: none;
+  white-space: nowrap;
+  transition: color 0.15s, border-color 0.15s;
+}
+.nav__tab:hover  { color: var(--gold); }
+.nav__tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+/* ═══════════════════════════════════════
+   PANELS
+═══════════════════════════════════════ */
+.panel {
+  display: none;
+  padding: var(--pad);
+  max-width: 960px;
+  margin: 0 auto;
+}
+.panel.active { display: block; }
+
+/* ═══════════════════════════════════════
+   SECTION HEADING
+═══════════════════════════════════════ */
+.sh {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 32px;
+  margin-bottom: 16px;
+}
+.sh::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+.sh:first-child { margin-top: 0; }
+
+/* ═══════════════════════════════════════
+   STAT GRID
+═══════════════════════════════════════ */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--gap);
+  margin-bottom: 28px;
+}
+.stat {
+  background: var(--navy-light);
+  border: 1px solid var(--border);
+  padding: 18px 20px;
+  text-align: center;
+}
+.stat__num {
+  font-family: var(--font-display);
+  font-size: 40px;
+  font-weight: 900;
+  color: var(--gold);
+  line-height: 1;
+  margin-bottom: 5px;
+}
+.stat__label {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════
+   CARDS
+═══════════════════════════════════════ */
+.card {
+  background: var(--navy-light);
+  border: 1px solid var(--border);
+  padding: 22px 26px;
+  margin-bottom: var(--gap);
+}
+.card--accent   { border-left: 4px solid var(--gold); }
+.card__title {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--navy);
+  letter-spacing: 0.02em;
+  margin-bottom: 8px;
+}
+.card__title--lg {
+  font-size: 22px;
+  color: var(--gold);
+}
+.card__body {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.85;
+}
+.card__body strong { color: var(--body); font-weight: 500; }
+
+/* ═══════════════════════════════════════
+   TWO / THREE COLUMN GRIDS
+═══════════════════════════════════════ */
+.g2 { display: grid; grid-template-columns: 1fr 1fr;       gap: var(--gap); }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr;   gap: var(--gap); }
+.g4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: var(--gap); }
+
+/* ═══════════════════════════════════════
+   INFO ROWS
+═══════════════════════════════════════ */
+.info-row {
+  background: var(--navy-light);
+  border: 1px solid var(--border);
+  padding: 13px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+.info-row__key {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.info-row__val {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--navy);
+}
+.info-row__val--gold { color: var(--gold); }
+
+/* ═══════════════════════════════════════
+   SCOPE GRID (sell / don't sell)
+═══════════════════════════════════════ */
+.scope-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  margin-bottom: var(--gap);
+}
+.scope-col {
+  background: var(--navy-light);
+  border: 1px solid var(--border);
+  padding: 20px 22px;
+}
+.scope-col__head {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.scope-col__head--yes { color: var(--gold); }
+.scope-col__head--no  { color: var(--red);  }
+.scope-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 13px;
+  color: var(--body);
+  padding: 6px 0;
+  border-bottom: 1px solid var(--gold-dim2);
+  line-height: 1.5;
+}
+.scope-item:last-child { border-bottom: none; }
+.scope-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+.scope-dot--yes { background: var(--gold); }
+.scope-dot--no  { background: var(--red);  }
+
+/* ═══════════════════════════════════════
+   LANGUAGE SWAP TABLE
+═══════════════════════════════════════ */
+.swap-table {
+  display: grid;
+  gap: 5px;
+}
+.swap-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+}
+.swap-cell {
+  padding: 12px 16px;
+}
+.swap-cell--bad  { background: var(--red-dim);   border: 1px solid var(--red-border); }
+.swap-cell--good { background: var(--green-dim); border: 1px solid var(--green-border); }
+.swap-cell__label {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+.swap-cell--bad  .swap-cell__label { color: var(--red);   }
+.swap-cell--good .swap-cell__label { color: var(--green); }
+.swap-cell__text {
+  font-size: 13px;
+  color: var(--body);
+}
+
+/* ═══════════════════════════════════════
+   WORKFLOW STEPS
+═══════════════════════════════════════ */
+.workflow {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: var(--gap);
+}
+.wf-step {
+  background: var(--navy-light);
+  border: 1px solid var(--border);
+  padding: 18px 22px;
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  gap: 16px;
+  align-items: start;
+}
+.wf-step__num {
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 900;
+  color: var(--gold);
+  line-height: 1;
+  opacity: 0.45;
+}
+.wf-step__title {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--navy);
+  margin-bottom: 4px;
+}
+.wf-step__body {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.75;
+}
+.wf-step__body strong { color: var(--body); font-weight: 500; }
+.wf-step__time {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: var(--gold-dim);
+  padding: 4px 10px;
+  white-space: nowrap;
+  margin-top: 2px;
+  align-self: flex-start;
+}
+
+/* ═══════════════════════════════════════
+   CHECKLISTS
+═══════════════════════════════════════ */
+.checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 24px;
+}
+.ci {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 11px 14px;
+  background: var(--navy-light);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: border-color 0.15s;
+  user-select: none;
+}
+.ci:hover { border-color: var(--gold); }
+.ci.done  { background: var(--green-dim); border-color: var(--green-border); }
+.ci.done .ci__text { color: var(--muted); text-decoration: line-through; }
+.ci__box {
+  width: 17px;
+  height: 17px;
+  border: 2px solid var(--border);
+  border-radius: 2px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--navy-light);
+  margin-top: 2px;
+  transition: background 0.15s, border-color 0.15s;
+}
+.ci.done .ci__box { background: var(--green); border-color: var(--green); }
+.ci__text {
+  font-size: 13px;
+  color: var(--body);
+  line-height: 1.5;
+  flex: 1;
+}
+.ci__tag {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  align-self: flex-start;
+  margin-top: 2px;
+}
+.ci__tag--now   { background: var(--red-dim);    color: var(--red);    border: 1px solid var(--red-border); }
+.ci__tag--soon  { background: var(--yellow-dim); color: var(--yellow); border: 1px solid rgba(245,158,11,0.25); }
+.ci__tag--later { background: var(--gold-dim);   color: var(--gold);   border: 1px solid rgba(0,180,160,0.2); }
+.ci__tag--done  { background: var(--green-dim);  color: var(--green);  border: 1px solid var(--green-border); }
+
+/* ═══════════════════════════════════════
+   PROGRESS BAR
+═══════════════════════════════════════ */
+.progress {
+  margin-bottom: 24px;
+}
+.progress__header {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 7px;
+}
+.progress__track {
+  height: 5px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress__fill {
+  height: 100%;
+  background: var(--gold);
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+/* ═══════════════════════════════════════
+   WEEKLY CALENDAR
+═══════════════════════════════════════ */
+.week-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  margin-bottom: var(--gap);
+}
+.day-card {
+  background: var(--navy-light);
+  border: 1px solid var(--border);
+  padding: 16px 14px;
+  min-height: 150px;
+}
+.day-card--delivery {
+  background: var(--gold-dim);
+  border-color: var(--gold);
+}
+.day-card__name {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--gold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.day-card--delivery .day-card__name { color: var(--gold-dark); border-bottom-color: rgba(0,180,160,0.25); }
+.day-card__tasks {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 10px;
+}
+.day-card__task {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.4;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+.day-card__task::before {
+  content: '·';
+  color: var(--gold);
+  flex-shrink: 0;
+  font-size: 14px;
+  line-height: 1.2;
+}
+.day-card--delivery .day-card__task { color: var(--body); }
+
+/* ═══════════════════════════════════════
+   SCALE MILESTONES
+═══════════════════════════════════════ */
+.milestones {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: var(--gap);
+}
+.milestone {
+  background: var(--navy-light);
+  border: 1px solid var(--border);
+  padding: 16px 20px;
+  display: grid;
+  grid-template-columns: 52px 1fr 1fr;
+  gap: 20px;
+  align-items: center;
+}
+.milestone--highlight {
+  background: var(--gold-dim);
+  border-color: var(--gold);
+}
+.milestone__num {
+  font-family: var(--font-display);
+  font-size: 34px;
+  font-weight: 900;
+  color: var(--gold);
+  line-height: 1;
+}
+.milestone__title {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--navy);
+  margin-bottom: 3px;
+}
+.milestone__sub {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.milestone__action {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.milestone__action strong { color: var(--body); font-weight: 500; }
+
+/* ═══════════════════════════════════════
+   PRICING TABLES
+═══════════════════════════════════════ */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: var(--gap);
+}
+.data-table thead tr { background: var(--navy); }
+.data-table th {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 400;
+}
+.data-table th:not(:first-child) { text-align: right; }
+.data-table td {
+  padding: 14px 16px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border);
+  background: var(--navy-light);
+  color: var(--body);
+  vertical-align: middle;
+}
+.data-table td:not(:first-child) { text-align: right; }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr.row--highlight td { background: var(--gold-dim); }
+
+/* cell type modifiers */
+.data-table td.td--name   { font-family:var(--font-display); font-size:16px; font-weight:800; color:var(--gold); }
+.data-table td.td--price  { font-family:var(--font-display); font-size:22px; font-weight:900; color:var(--navy); }
+.data-table td.td--resell { font-family:var(--font-display); font-size:18px; font-weight:700; color:var(--gold-dark); }
+.data-table td.td--money  { font-family:var(--font-display); font-size:18px; font-weight:700; color:var(--navy); }
+.data-table td.td--profit { font-family:var(--font-display); font-size:18px; font-weight:700; color:var(--gold); }
+.data-table td.td--annual { font-family:var(--font-display); font-size:22px; font-weight:900; color:var(--navy); }
+.data-table td.td--clients{ font-family:var(--font-display); font-size:30px; font-weight:900; color:var(--gold); line-height:1; }
+.data-table td.td--dim    { color: var(--muted); font-size: 12px; }
+
+/* ═══════════════════════════════════════
+   DISCLAIMER BOX
+═══════════════════════════════════════ */
+.disclaimer {
+  background: var(--bg);
+  border-left: 4px solid var(--gold);
+  padding: 18px 22px;
+  margin-bottom: var(--gap);
+}
+.disclaimer__label {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+.disclaimer__body {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.9;
+}
+.disclaimer__body strong { color: var(--body); font-weight: 500; }
+
+/* ═══════════════════════════════════════
+   PRINT
+═══════════════════════════════════════ */
+@media print {
+  .topbar { position: static; }
+  .nav    { display: none; }
+  .panel  { display: block !important; page-break-after: always; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- ────────────────────────────────────
+     TOP BAR
+──────────────────────────────────── -->
+<header class="topbar">
+  <div class="topbar__brand">ALL WAYS POSTED</div>
+  <div class="topbar__label">Operating Document v1.0 · March 2026</div>
+  <div class="topbar__status"><div class="status-dot"></div>Pre-Launch</div>
+</header>
+
+<!-- ────────────────────────────────────
+     NAV
+──────────────────────────────────── -->
+<nav class="nav">
+  <button class="nav__tab active"  onclick="show('overview',this)">Overview</button>
+  <button class="nav__tab"         onclick="show('scope',this)">Scope & Positioning</button>
+  <button class="nav__tab"         onclick="show('fulfillment',this)">Fulfillment</button>
+  <button class="nav__tab"         onclick="show('pricing',this)">Pricing</button>
+  <button class="nav__tab"         onclick="show('launch',this)">Launch Checklist</button>
+  <button class="nav__tab"         onclick="show('ops',this)">Weekly Ops</button>
+  <button class="nav__tab"         onclick="show('legal',this)">Legal & Scope</button>
+</nav>
+
+<!-- ════════════════════════════════════
+     OVERVIEW
+════════════════════════════════════ -->
+<div id="overview" class="panel active">
+
+  <div class="stats">
+    <div class="stat"><div class="stat__num">$497</div><div class="stat__label">Direct client<br>monthly price</div></div>
+    <div class="stat"><div class="stat__num">$450</div><div class="stat__label">Agency wholesale<br>standard tier</div></div>
+    <div class="stat"><div class="stat__num">20</div><div class="stat__label">Posts per<br>client/month</div></div>
+    <div class="stat"><div class="stat__num">~25</div><div class="stat__label">Min fulfillment<br>per client/week</div></div>
+  </div>
+
+  <div class="sh">What This Business Is</div>
+  <div class="card card--accent">
+    <div class="card__title">All Ways Posted</div>
+    <div class="card__body">A done-for-you <strong>social media content posting service</strong> targeting local service businesses and professional services directly, and marketing agencies via a white-label wholesale model. Content is created and delivered using Google's Pomelli AI as the fulfillment engine. <strong>We post. That's it.</strong> No claims about marketing outcomes, leads, or growth.</div>
+  </div>
+
+  <div class="sh">The Two Revenue Models</div>
+  <div class="g2">
+    <div class="card">
+      <div class="card__title">Model A — Direct to Business</div>
+      <div class="card__body">
+        <strong>Target:</strong> Local service businesses (salons, gyms) and professional services (realtors, dentists).<br><br>
+        <strong>Entry offer:</strong> 2 weeks of free content built in Pomelli, delivered before asking for anything.<br><br>
+        <strong>Price:</strong> $497/month · Month-to-month · Cancel anytime.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card__title">Model B — Agency Wholesale</div>
+      <div class="card__body">
+        <strong>Target:</strong> Small to mid-size agencies already billing for social but not consistently delivering it.<br><br>
+        <strong>Model:</strong> White-label wholesale at $300–$600/client/month. Agency resells at $1,000+.<br><br>
+        <strong>Promise:</strong> We fulfill under their brand. Clients never know we exist.
+      </div>
+    </div>
+  </div>
+
+  <div class="sh">The Fulfillment Engine</div>
+  <div class="card">
+    <div class="card__title">Powered by Google Pomelli</div>
+    <div class="card__body">
+      <strong>labs.google.com/pomelli</strong> — Free in beta (US, Canada, Australia, New Zealand · English only). Scans client website, extracts Brand DNA (colors, fonts, tone), generates on-brand social posts automatically.<br><br>
+      <strong>Key features:</strong> Instagram posts, Facebook ads, YouTube assets, email banners, animated video (Pomelli Animate via Veo 3.1), product photoshoot (launched Feb 2026 via Nano Banana 2). Natural language editing. No design skills required.
+    </div>
+  </div>
+
+  <div class="sh">Business Identity</div>
+  <div class="info-row"><div class="info-row__key">Business Name</div><div class="info-row__val">All Ways Posted</div></div>
+  <div class="info-row"><div class="info-row__key">Website</div><div class="info-row__val info-row__val--gold">allwaysposted.com</div></div>
+  <div class="info-row"><div class="info-row__key">Partner Email</div><div class="info-row__val">partners@allwaysposted.com</div></div>
+  <div class="info-row"><div class="info-row__key">Document Version</div><div class="info-row__val">v1.0 — Pre-Launch</div></div>
+  <div class="info-row"><div class="info-row__key">Owner</div><div class="info-row__val">John Lawson · ColderICE Media</div></div>
+
+</div>
+
+<!-- ════════════════════════════════════
+     SCOPE & POSITIONING
+════════════════════════════════════ -->
+<div id="scope" class="panel">
+
+  <div class="sh">Core Positioning Statement</div>
+  <div class="card card--accent">
+    <div class="card__title card__title--lg">"We post. That's it."</div>
+    <div class="card__body">All Ways Posted is a <strong>social media content creation and delivery service.</strong> We build on-brand posts and deliver them on a consistent schedule. We are not a marketing agency, social media manager, paid ads service, or growth consultant. The product is consistency and relief from the frustration of never posting.</div>
+  </div>
+
+  <div class="sh">What We Sell vs. What We Don't</div>
+  <div class="scope-grid">
+    <div class="scope-col">
+      <div class="scope-col__head scope-col__head--yes">✓ We Sell This</div>
+      <div class="scope-item"><span class="scope-dot scope-dot--yes"></span>20 on-brand posts per month</div>
+      <div class="scope-item"><span class="scope-dot scope-dot--yes"></span>5 posts delivered every Friday</div>
+      <div class="scope-item"><span class="scope-dot scope-dot--yes"></span>Captions + branded visuals matched to their brand</div>
+      <div class="scope-item"><span class="scope-dot scope-dot--yes"></span>Brand DNA profile built from their website</div>
+      <div class="scope-item"><span class="scope-dot scope-dot--yes"></span>Animated video posts (Pomelli Animate)</div>
+      <div class="scope-item"><span class="scope-dot scope-dot--yes"></span>Product photoshoot images (Pomelli Photoshoot)</div>
+      <div class="scope-item"><span class="scope-dot scope-dot--yes"></span>Consistent, reliable Friday delivery</div>
+      <div class="scope-item"><span class="scope-dot scope-dot--yes"></span>White label fulfillment for agencies</div>
+    </div>
+    <div class="scope-col">
+      <div class="scope-col__head scope-col__head--no">✗ We Don't Sell This</div>
+      <div class="scope-item"><span class="scope-dot scope-dot--no"></span>New customers or lead generation</div>
+      <div class="scope-item"><span class="scope-dot scope-dot--no"></span>Follower growth guarantees</div>
+      <div class="scope-item"><span class="scope-dot scope-dot--no"></span>Engagement rate promises</div>
+      <div class="scope-item"><span class="scope-dot scope-dot--no"></span>Social media account management</div>
+      <div class="scope-item"><span class="scope-dot scope-dot--no"></span>Paid advertising or ad management</div>
+      <div class="scope-item"><span class="scope-dot scope-dot--no"></span>Marketing strategy or consulting</div>
+      <div class="scope-item"><span class="scope-dot scope-dot--no"></span>Community management or DM responses</div>
+      <div class="scope-item"><span class="scope-dot scope-dot--no"></span>Revenue or ROI outcomes</div>
+    </div>
+  </div>
+
+  <div class="sh">Language Rules</div>
+  <div class="swap-table">
+    <div class="swap-row">
+      <div class="swap-cell swap-cell--bad"><div class="swap-cell__label">Never Say</div><div class="swap-cell__text">"Grow your business with social media"</div></div>
+      <div class="swap-cell swap-cell--good"><div class="swap-cell__label">Say Instead</div><div class="swap-cell__text">"Stay visible without doing the work"</div></div>
+    </div>
+    <div class="swap-row">
+      <div class="swap-cell swap-cell--bad"><div class="swap-cell__label">Never Say</div><div class="swap-cell__text">"Attract more clients from social"</div></div>
+      <div class="swap-cell swap-cell--good"><div class="swap-cell__label">Say Instead</div><div class="swap-cell__text">"Your feed stays active whether you post or not"</div></div>
+    </div>
+    <div class="swap-row">
+      <div class="swap-cell swap-cell--bad"><div class="swap-cell__label">Never Say</div><div class="swap-cell__text">"We'll help you get more customers"</div></div>
+      <div class="swap-cell swap-cell--good"><div class="swap-cell__label">Say Instead</div><div class="swap-cell__text">"We take the posting off your plate. That's it."</div></div>
+    </div>
+    <div class="swap-row">
+      <div class="swap-cell swap-cell--bad"><div class="swap-cell__label">Never Say</div><div class="swap-cell__text">"Boost your engagement and reach"</div></div>
+      <div class="swap-cell swap-cell--good"><div class="swap-cell__label">Say Instead</div><div class="swap-cell__text">"20 posts a month, on-brand, delivered Friday"</div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════
+     FULFILLMENT
+════════════════════════════════════ -->
+<div id="fulfillment" class="panel">
+
+  <div class="sh">Phase 1 — New Client Onboarding (Day 1)</div>
+  <div class="workflow">
+    <div class="wf-step">
+      <div class="wf-step__num">01</div>
+      <div>
+        <div class="wf-step__title">Payment Confirmed → Send Welcome</div>
+        <div class="wf-step__body">Reply to their email: <strong>"Payment received — you're in. Watch for your first batch Friday."</strong> Add to client tracker: name, business, website URL, start date, next delivery date, tier.</div>
+      </div>
+      <div class="wf-step__time">5 min</div>
+    </div>
+    <div class="wf-step">
+      <div class="wf-step__num">02</div>
+      <div>
+        <div class="wf-step__title">Run Pomelli — Build Brand DNA</div>
+        <div class="wf-step__body">Go to <strong>labs.google.com/pomelli</strong>. Enter client website URL. Let it extract Brand DNA: colors, fonts, tone of voice. Screenshot the profile. Note any gaps — if their site is weak, supplement manually before generating.</div>
+      </div>
+      <div class="wf-step__time">10 min</div>
+    </div>
+    <div class="wf-step">
+      <div class="wf-step__num">03</div>
+      <div>
+        <div class="wf-step__title">Generate First Batch + QC</div>
+        <div class="wf-step__body">Generate first 5 posts in Pomelli. QC check: Does it represent their business? Are colors/fonts on-brand? Is caption voice consistent? Make edits inside Pomelli before downloading. Download all assets to client folder.</div>
+      </div>
+      <div class="wf-step__time">10 min</div>
+    </div>
+  </div>
+
+  <div class="sh">Phase 2 — Weekly Delivery (Every Friday)</div>
+  <div class="workflow">
+    <div class="wf-step">
+      <div class="wf-step__num">04</div>
+      <div>
+        <div class="wf-step__title">Generate Week's Content</div>
+        <div class="wf-step__body">Open Pomelli, load client session or re-enter URL. Generate <strong>5 posts + 1 ad creative.</strong> Vary content types: promotional, educational, behind-the-scenes, testimonial, offer. Use Pomelli Animate on 1 post/week. Download and organize by client folder.</div>
+      </div>
+      <div class="wf-step__time">15–20 min</div>
+    </div>
+    <div class="wf-step">
+      <div class="wf-step__num">05</div>
+      <div>
+        <div class="wf-step__title">Deliver to Client</div>
+        <div class="wf-step__body">Drop files into shared Google Drive folder (one per client). Send short message: <strong>"Your content for the week is ready."</strong> Include one sentence on best posting times. Attach caption doc with copy-paste captions if needed.</div>
+      </div>
+      <div class="wf-step__time">5 min</div>
+    </div>
+    <div class="wf-step">
+      <div class="wf-step__num">06</div>
+      <div>
+        <div class="wf-step__title">Log and Track</div>
+        <div class="wf-step__body">Mark delivery date in client sheet. Note any feedback. Flag churn signals: no replies, late payment, complaints. Set next Friday reminder.</div>
+      </div>
+      <div class="wf-step__time">2 min</div>
+    </div>
+  </div>
+
+  <div class="sh">Phase 3 — Monthly Retention</div>
+  <div class="workflow">
+    <div class="wf-step">
+      <div class="wf-step__num">07</div>
+      <div>
+        <div class="wf-step__title">Monthly Recap + Renewal</div>
+        <div class="wf-step__body">Send brief recap: <strong>"Here's what went out this month — 20 posts delivered."</strong> Include 1–2 engagement stats if the client shares them. Soft pitch add-on: <strong>"Want animated video posts next month? +$150/mo."</strong> Invoice sends same day every month.</div>
+      </div>
+      <div class="wf-step__time">10 min</div>
+    </div>
+  </div>
+
+  <div class="sh">Time Math</div>
+  <div class="stats">
+    <div class="stat"><div class="stat__num">25</div><div class="stat__label">Min onboarding<br>(one-time)</div></div>
+    <div class="stat"><div class="stat__num">25</div><div class="stat__label">Min weekly<br>per client</div></div>
+    <div class="stat"><div class="stat__num">6 hrs</div><div class="stat__label">Total/month<br>at 10 clients</div></div>
+    <div class="stat"><div class="stat__num">$830</div><div class="stat__label">Revenue/hour<br>at 10 clients</div></div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════
+     PRICING
+════════════════════════════════════ -->
+<div id="pricing" class="panel">
+
+  <div class="sh">Direct Client Pricing (Model A)</div>
+  <div class="info-row"><div class="info-row__key">Monthly Retainer</div><div class="info-row__val info-row__val--gold">$497/month</div></div>
+  <div class="info-row"><div class="info-row__key">Entry Offer</div><div class="info-row__val">2 weeks free content — no strings</div></div>
+  <div class="info-row"><div class="info-row__key">Contract</div><div class="info-row__val">Month-to-month · Cancel with 7 days notice</div></div>
+  <div class="info-row"><div class="info-row__key">Setup Fee</div><div class="info-row__val">None — Brand DNA included</div></div>
+
+  <div class="sh">Agency Wholesale Tiers (Model B)</div>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Tier</th>
+        <th>Your Cost/Client/Mo</th>
+        <th>Agency Resells At</th>
+        <th>Agency Margin</th>
+        <th>Includes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="td--name">Base</td>
+        <td class="td--price">$300</td>
+        <td class="td--resell">$750–$1,000</td>
+        <td>$450–$700</td>
+        <td>20 posts · Friday delivery · Brand DNA</td>
+      </tr>
+      <tr class="row--highlight">
+        <td class="td--name">Standard ★</td>
+        <td class="td--price">$450</td>
+        <td class="td--resell">$1,000–$1,200</td>
+        <td>$550–$750</td>
+        <td>20 posts · Animated video · Priority delivery</td>
+      </tr>
+      <tr>
+        <td class="td--name">Full</td>
+        <td class="td--price">$600</td>
+        <td class="td--resell">$1,200–$1,500</td>
+        <td>$600–$900</td>
+        <td>20 posts · Video · Product photoshoot</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="sh">Upsell Stack</div>
+  <div class="g2">
+    <div>
+      <div class="info-row"><div class="info-row__key">Animated Video Add-On</div><div class="info-row__val info-row__val--gold">+$150/mo</div></div>
+      <div class="info-row"><div class="info-row__key">Quarterly Brand Refresh</div><div class="info-row__val info-row__val--gold">$150–$200/quarter</div></div>
+      <div class="info-row"><div class="info-row__key">Reputation Mgmt Add-On</div><div class="info-row__val info-row__val--gold">+$100–$150/mo</div></div>
+      <div class="info-row"><div class="info-row__key">Monthly Analytics Report</div><div class="info-row__val info-row__val--gold">+$75–$100/mo</div></div>
+    </div>
+    <div>
+      <div class="info-row"><div class="info-row__key">Business DNA Audit (one-time)</div><div class="info-row__val info-row__val--gold">$297–$497</div></div>
+      <div class="info-row"><div class="info-row__key">90-Day Content Jumpstart</div><div class="info-row__val info-row__val--gold">$500–$800</div></div>
+      <div class="info-row"><div class="info-row__key">Product Photoshoot Pack</div><div class="info-row__val info-row__val--gold">+$100/mo</div></div>
+      <div class="info-row"><div class="info-row__key">System License (VA/Freelancer)</div><div class="info-row__val info-row__val--gold">$2k–$5k</div></div>
+    </div>
+  </div>
+
+  <div class="sh">Revenue Scale Projection (Direct · $497/month)</div>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Clients</th>
+        <th>Monthly Revenue</th>
+        <th>Hours/Month</th>
+        <th>Revenue/Hour</th>
+        <th>Annual</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="td--clients">5</td>
+        <td class="td--money">$2,485</td>
+        <td class="td--dim">~3 hrs</td>
+        <td class="td--profit">$828</td>
+        <td>$29,820</td>
+      </tr>
+      <tr class="row--highlight">
+        <td class="td--clients">10</td>
+        <td class="td--money">$4,970</td>
+        <td class="td--dim">~6 hrs</td>
+        <td class="td--profit">$828</td>
+        <td>$59,640</td>
+      </tr>
+      <tr>
+        <td class="td--clients">20</td>
+        <td class="td--money">$9,940</td>
+        <td class="td--dim">~10 hrs + VA</td>
+        <td class="td--profit">$994</td>
+        <td>$119,280</td>
+      </tr>
+      <tr>
+        <td class="td--clients">50</td>
+        <td class="td--money">$24,850</td>
+        <td class="td--dim">Agency model</td>
+        <td class="td--profit">—</td>
+        <td>$298,200</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+<!-- ════════════════════════════════════
+     LAUNCH CHECKLIST
+════════════════════════════════════ -->
+<div id="launch" class="panel">
+
+  <div class="progress">
+    <div class="progress__header">
+      <span>Launch Progress</span>
+      <span id="prog-pct">0%</span>
+    </div>
+    <div class="progress__track">
+      <div class="progress__fill" id="prog-bar" style="width:0%"></div>
+    </div>
+  </div>
+
+  <div class="sh">Must Have Before First Client</div>
+  <div class="checklist">
+    <div class="ci" onclick="tick(this)"><div class="ci__box"></div><div class="ci__text">Register allwaysposted.com domain</div><span class="ci__tag ci__tag--now">Now</span></div>
+    <div class="ci" onclick="tick(this)"><div class="ci__box"></div><div class="ci__text">Set up partners@allwaysposted.com email address</div><span class="ci__tag ci__tag--now">Now</span></div>
+    <div class="ci" onclick="tick(this)"><div class="ci__box"></div><div class="ci__text">Create Pomelli account and run one test client through the full workflow</div><span class="ci__tag ci__tag--now">Now</span></div>
+    <div class="ci" onclick="tick(this)"><div class="ci__box"></div><div class="ci__text">Set up payment link (Stripe, PayPal, or CashApp) to receive $497/month</div><span class="ci__tag ci__tag--now">Now</span></div>
+    <div class="ci" onclick="tick(this)"><div class="ci__box"></div><div class="ci__text">Create client tracker spreadsheet: name, website, tier, start date, next delivery, payment status</div><span class="ci__tag ci__tag--now">Now</span></div>
+    <div class="ci" onclick="tick(this)"><div class="ci__box"></div><div class="ci__text">Create Google Drive folder structure: one master folder → one sub-folder per client</div><span class="ci__tag ci__tag--now">Now</span></div>
+    <div class="ci" onclick="tick(this)"><div class="ci__box"></div><div class="ci__text">3-email cold outreach sequence — built and ready to send</div><span class="ci__tag ci__tag--done">Done</span></div>
+    <div class="ci" onclick="tick(this)"><div class="ci__box"></div><div class="ci__text">Invoice template — built and ready to send</div><span class="ci__tag ci__tag--done">Done</span></div>
+  </div>
+
+  <div class="sh">Agency Model Setup</div>
+  <div class="checklist">
+    <div class="ci" onclick="tick(this)"><div class="ci__box"></div><div class="ci__text">Draft 1-page partner agreement: service scope, wholesale pricing, white label terms, cancellation</div><span class="ci__tag ci__tag--soon">Soon</span></div>
+    <div class="ci" onclick="tick(this)"><div class="ci__box"></div><div class="ci__text">Build agency intake form: agency name, contact, first client URL, selected tier</div><span class="ci__tag ci__tag--soon">Soon</span></div>
+    <div class="ci" onclick="tick(this)"><div class="ci__box"></div><div class="ci__text">Build agency prospect list: small marketing agencies, PR firms, social media consultants with 5–20 SMB clients</div><span class="ci__tag ci__tag--soon">Soon</span></div>
+    <div class="ci" onclick="tick(this)"><div class="ci__box"></div><div class="ci__text">Agency partner one-pager — built and ready to send</div><span class="ci__tag ci__tag--done">Done</span></div>
+  </div>
+
+  <div class="sh">Web Presence</div>
+  <div class="checklist">
+    <div class="ci" onclick="tick(this)"><div class="ci__box"></div><div class="ci__text">Build simple landing page at allwaysposted.com — hero, what it is, pricing, contact</div><span class="ci__tag ci__tag--soon">Soon</span></div>
+    <div class="ci" onclick="tick(this)"><div class="ci__box"></div><div class="ci__text">Set up Instagram @allwaysposted (or closest handle)</div><span class="ci__tag ci__tag--later">Later</span></div>
+    <div class="ci" onclick="tick(this)"><div class="ci__box"></div><div class="ci__text">Set up LinkedIn company page for All Ways Posted</div><span class="ci__tag ci__tag--later">Later</span></div>
+    <div class="ci" onclick="tick(this)"><div class="ci__box"></div><div class="ci__text">Set up Facebook Business page</div><span class="ci__tag ci__tag--later">Later</span></div>
+  </div>
+
+  <div class="sh">First Revenue Milestones</div>
+  <div class="checklist">
+    <div class="ci" onclick="tick(this)"><div class="ci__box"></div><div class="ci__text">Build Pomelli content for 10 prospective businesses before starting outreach</div><span class="ci__tag ci__tag--now">Now</span></div>
+    <div class="ci" onclick="tick(this)"><div class="ci__box"></div><div class="ci__text">Send cold email sequence to first 10 prospects</div><span class="ci__tag ci__tag--now">Now</span></div>
+    <div class="ci" onclick="tick(this)"><div class="ci__box"></div><div class="ci__text">Close first paying client at $497/month</div><span class="ci__tag ci__tag--now">Now</span></div>
+    <div class="ci" onclick="tick(this)"><div class="ci__box"></div><div class="ci__text">Deliver first Friday content batch — prove the model works</div><span class="ci__tag ci__tag--now">Now</span></div>
+    <div class="ci" onclick="tick(this)"><div class="ci__box"></div><div class="ci__text">Reach 5 paying direct clients</div><span class="ci__tag ci__tag--soon">Soon</span></div>
+    <div class="ci" onclick="tick(this)"><div class="ci__box"></div><div class="ci__text">Close first agency partner</div><span class="ci__tag ci__tag--soon">Soon</span></div>
+    <div class="ci" onclick="tick(this)"><div class="ci__box"></div><div class="ci__text">Reach 10 total clients ($4,970/month)</div><span class="ci__tag ci__tag--later">Later</span></div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════
+     WEEKLY OPS
+════════════════════════════════════ -->
+<div id="ops" class="panel">
+
+  <div class="sh">Weekly Operating Schedule</div>
+  <div class="week-grid">
+    <div class="day-card">
+      <div class="day-card__name">Mon</div>
+      <div class="day-card__tasks">
+        <span class="day-card__task">Prospect research</span>
+        <span class="day-card__task">Build lead list</span>
+        <span class="day-card__task">Run Pomelli on prospects</span>
+        <span class="day-card__task">Send cold Email 1</span>
+      </div>
+    </div>
+    <div class="day-card">
+      <div class="day-card__name">Tue</div>
+      <div class="day-card__tasks">
+        <span class="day-card__task">Follow-up emails (Day 3)</span>
+        <span class="day-card__task">Reply to interested leads</span>
+        <span class="day-card__task">Send invoices</span>
+        <span class="day-card__task">Onboard new clients</span>
+      </div>
+    </div>
+    <div class="day-card">
+      <div class="day-card__name">Wed</div>
+      <div class="day-card__tasks">
+        <span class="day-card__task">New client Brand DNA builds</span>
+        <span class="day-card__task">Run Pomelli setups</span>
+        <span class="day-card__task">Partner agreement follow-ups</span>
+        <span class="day-card__task">Admin / billing</span>
+      </div>
+    </div>
+    <div class="day-card">
+      <div class="day-card__name">Thu</div>
+      <div class="day-card__tasks">
+        <span class="day-card__task">Generate ALL client content</span>
+        <span class="day-card__task">QC pass every client</span>
+        <span class="day-card__task">Organize client folders</span>
+        <span class="day-card__task">Breakup emails (Day 7)</span>
+      </div>
+    </div>
+    <div class="day-card day-card--delivery">
+      <div class="day-card__name">Fri 📦</div>
+      <div class="day-card__tasks">
+        <span class="day-card__task">Deliver to ALL clients</span>
+        <span class="day-card__task">Send recap messages</span>
+        <span class="day-card__task">Log in tracker</span>
+        <span class="day-card__task">Monthly invoices (EOM)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sh">Scaling Milestones</div>
+  <div class="milestones">
+    <div class="milestone">
+      <div class="milestone__num">5</div>
+      <div>
+        <div class="milestone__title">$2,485/month · ~3 hrs/week</div>
+        <div class="milestone__sub">Solo and comfortable. Proof of concept complete.</div>
+      </div>
+      <div class="milestone__action"><strong>Action:</strong> Start agency outreach. Build sample content library.</div>
+    </div>
+    <div class="milestone milestone--highlight">
+      <div class="milestone__num">10</div>
+      <div>
+        <div class="milestone__title">$4,970/month · ~6 hrs/week</div>
+        <div class="milestone__sub">Still solo but time to bring in a delivery VA.</div>
+      </div>
+      <div class="milestone__action"><strong>Action:</strong> Hire VA for Thursday content generation and Friday delivery.</div>
+    </div>
+    <div class="milestone">
+      <div class="milestone__num">20</div>
+      <div>
+        <div class="milestone__title">$9,940/month · VA model</div>
+        <div class="milestone__sub">Agency tier. You own sales and QC only.</div>
+      </div>
+      <div class="milestone__action"><strong>Action:</strong> Focus 100% on agency wholesale. Sell the system to others.</div>
+    </div>
+    <div class="milestone">
+      <div class="milestone__num">50</div>
+      <div>
+        <div class="milestone__title">$24,850/month · Agency wholesale</div>
+        <div class="milestone__sub">You fulfill for agencies at $300–$600. They resell at $1k+.</div>
+      </div>
+      <div class="milestone__action"><strong>Action:</strong> License the system. Franchise to other operators.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════
+     LEGAL & SCOPE
+════════════════════════════════════ -->
+<div id="legal" class="panel">
+
+  <div class="sh">Service Scope Disclaimer</div>
+  <div class="disclaimer">
+    <div class="disclaimer__label">Standard Disclaimer — Copy Into All Agreements and Invoices</div>
+    <div class="disclaimer__body">All Ways Posted (allwaysposted.com) provides <strong>social media content creation and delivery only.</strong> This service does not include social media account management, paid advertising, community management, or marketing strategy of any kind. All Ways Posted makes <strong>no guarantees regarding follower growth, engagement rates, lead generation, website traffic, or revenue outcomes.</strong> Results from posted content depend entirely on factors outside the scope of this service, including but not limited to: offer quality, audience size, platform algorithms, and market conditions. The client is responsible for reviewing and approving all content prior to publication and for posting content to their own platforms unless a separate posting arrangement has been agreed upon in writing. Either party may cancel this service with 7 days written notice.</div>
+  </div>
+
+  <div class="sh">Agency Partner Agreement — Required Terms</div>
+  <div class="card">
+    <div class="card__title">White Label Terms</div>
+    <div class="card__body">Agency may present deliverables under their own brand name. All Ways Posted name and branding will not appear on any deliverable. All Ways Posted will not contact agency clients directly under any circumstance. Agency owns the client relationship entirely.</div>
+  </div>
+  <div class="card">
+    <div class="card__title">Wholesale Pricing Terms</div>
+    <div class="card__body">Agency pays All Ways Posted the agreed wholesale rate per active client per month. Agency may set their own resale price — All Ways Posted has no involvement in agency billing arrangements. Wholesale rates are billed monthly per active client.</div>
+  </div>
+  <div class="card">
+    <div class="card__title">Cancellation Terms</div>
+    <div class="card__body">Either party may cancel any individual client engagement with 7 days written notice. No penalty for cancellation. Prepaid amounts for cancelled clients are not refunded. The full partnership agreement may be terminated with 30 days written notice.</div>
+  </div>
+  <div class="card">
+    <div class="card__title">Content Approval</div>
+    <div class="card__body">Agency is responsible for reviewing and approving all content before delivery to their clients. All Ways Posted will revise content within 24 hours of a revision request. Agency assumes responsibility for any content forwarded to clients without review.</div>
+  </div>
+  <div class="card">
+    <div class="card__title">Scope Limitation</div>
+    <div class="card__body">This service provides content creation and delivery only. All Ways Posted makes no guarantees regarding social media performance, follower growth, engagement rates, or business outcomes for agency clients. Agency is responsible for communicating this scope to their own clients.</div>
+  </div>
+
+  <div class="sh">Key Business Rules</div>
+  <div class="info-row"><div class="info-row__key">Contract Type</div><div class="info-row__val">Month-to-month only · No annual lock-in</div></div>
+  <div class="info-row"><div class="info-row__key">Client Cancellation</div><div class="info-row__val">7 days written notice</div></div>
+  <div class="info-row"><div class="info-row__key">Agency Partner Cancellation</div><div class="info-row__val">30 days written notice</div></div>
+  <div class="info-row"><div class="info-row__key">Delivery Guarantee</div><div class="info-row__val">20 posts per month · 5 every Friday</div></div>
+  <div class="info-row"><div class="info-row__key">Revision Policy</div><div class="info-row__val">Revisions within 24 hours of request</div></div>
+  <div class="info-row"><div class="info-row__key">Content Ownership</div><div class="info-row__val">Client owns all delivered content upon payment</div></div>
+  <div class="info-row"><div class="info-row__key">What We Don't Guarantee</div><div class="info-row__val">Leads · Growth · Engagement · Revenue · ROI</div></div>
+
+</div>
+
+<!-- ════════════════════════════════════
+     JS
+════════════════════════════════════ -->
+<script>
+  function show(id, el) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav__tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    el.classList.add('active');
+  }
+
+  function tick(el) {
+    el.classList.toggle('done');
+    el.querySelector('.ci__box').textContent = el.classList.contains('done') ? '✓' : '';
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const all  = document.querySelectorAll('#launch .ci').length;
+    const done = document.querySelectorAll('#launch .ci.done').length;
+    const pct  = Math.round((done / all) * 100);
+    document.getElementById('prog-bar').style.width = pct + '%';
+    document.getElementById('prog-pct').textContent  = pct + '%';
+  }
+</script>
+
+</body>
+</html>

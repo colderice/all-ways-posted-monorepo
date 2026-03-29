@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Social Posting Pack — Outreach + Invoice System</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold:       #C4982E;
+    --gold-light: #E0B44C;
+    --gold-dark:  #A67B1B;
+    --gold-dim:   rgba(196,152,46,0.10);
+    --gold-dim2:  rgba(196,152,46,0.05);
+    --navy:       #1E2B3C;
+    --navy-light: #2D3E55;
+    --navy-dark:  #121B27;
+    --body:       #e2e8f0;
+    --muted:      #94a3b8;
+    --border:     #334155;
+    --bg:         #0f172a;
+    --white:      #ffffff;
+    --green:      #22c55e;
+    --red:        #ef4444;
+    
+    --font-display: 'Barlow Condensed', sans-serif;
+    --font-body:    'DM Sans', sans-serif;
+    --font-mono:    'Space Mono', monospace;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--navy);
+    color: var(--body);
+    font-family: var(--font-body);
+    font-weight: 300;
+    min-height: 100vh;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page { 
+    width: 100%; 
+    max-width: none; 
+    margin: 0; 
+    padding: 40px;
+    transition: none; /* Zoom doesn't need transition usually */
+    transform-origin: top center;
+  }
+  
+  /* ZOOM CONTROLS */
+  .zoom-controls {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    display: flex;
+    gap: 10px;
+    background: var(--navy-light);
+    border: 1px solid var(--border);
+    padding: 8px;
+    z-index: 1000;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  }
+  .zoom-btn {
+    width: 36px;
+    height: 36px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--gold);
+    font-family: var(--font-mono);
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .zoom-btn:hover { background: var(--gold); color: var(--navy-light); }
+  .zoom-info {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    padding: 0 5px;
+  }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 32px;
+    border-bottom: 2px solid var(--border);
+    background: var(--navy-light);
+    padding: 0 40px;
+  }
+  .tab {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 14px 24px;
+    cursor: pointer;
+    color: var(--muted);
+    border: none;
+    border-bottom: 3px solid transparent;
+    background: none;
+    margin-bottom: -2px;
+    transition: all 0.2s;
+  }
+  .tab:hover { color: var(--gold); }
+  .tab.active { color: var(--gold); border-bottom: 3px solid var(--gold); }
+  .panel { display: none; padding: 0 40px 40px; max-width: 1000px; margin: 0 auto; }
+  .panel.active { display: block; }
+
+  /* SECTION HEADER */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+    margin-top: 32px;
+  }
+  .section-header h2 {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    white-space: nowrap;
+  }
+  .section-header .line { flex:1; height:1px; background: var(--border); }
+  .section-header:first-child { margin-top: 0; }
+
+  /* POSITIONING BOX */
+  .positioning-box {
+    background: var(--gold-dim);
+    border: 1px solid var(--border);
+    padding: 24px 28px;
+    margin-bottom: 32px;
+    border-left: 4px solid var(--gold);
+  }
+  .pos-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .pos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .pos-col-label {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .pos-col-label.no { color: var(--red); }
+  .pos-col-label.yes { color: var(--gold); }
+  .pos-item {
+    font-size: 14px;
+    line-height: 1.8;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    color: var(--body);
+    margin-bottom: 6px;
+  }
+  .pos-item .icon { flex-shrink: 0; margin-top: 4px; font-size: 10px; }
+
+  /* COPY BUTTON */
+  .copy-btn {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .copy-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .copy-btn.copied { border-color: var(--green); color: var(--green); }
+
+  /* EMAIL CARDS */
+  .email-stack { display: grid; gap: 20px; }
+  .email-card {
+    background: var(--navy-light);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .email-card:hover { border-color: var(--gold); }
+  .email-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 20px;
+    background: var(--navy);
+    border-bottom: 1px solid var(--border);
+  }
+  .email-day {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+  .email-subject {
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--navy-light);
+    letter-spacing: 0.04em;
+  }
+  .email-wordcount {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+  }
+  .email-body {
+    padding: 24px 28px;
+    font-size: 16px;
+    line-height: 1.9;
+    color: var(--body);
+    white-space: pre-wrap;
+    font-family: var(--font-body);
+  }
+  .email-note {
+    padding: 12px 28px;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+  }
+
+  /* RESPONSE SCRIPTS */
+  .response-grid { display: grid; gap: 16px; }
+  .response-card {
+    background: var(--navy-light);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .response-header {
+    padding: 12px 20px;
+    background: var(--bg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .response-type {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--navy);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .response-tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border: 1px solid;
+  }
+  .tag-positive { color: var(--green); border-color: var(--green); background: var(--gold-dim2); }
+  .tag-objection { color: var(--gold); border-color: var(--gold); background: var(--gold-dim); }
+  .tag-no { color: var(--red); border-color: var(--red); }
+  .tag-silence { color: var(--muted); border-color: var(--muted); }
+  .response-body {
+    padding: 20px 24px;
+    font-size: 15px;
+    line-height: 1.9;
+    color: var(--body);
+    white-space: pre-wrap;
+  }
+  .objection-sub {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin: 16px 0 8px;
+  }
+  .objection-sub:first-child { margin-top: 0; }
+
+  /* INVOICE */
+  .invoice-wrap {
+    background: var(--navy-light);
+    border: 1px solid var(--border);
+    padding: 64px 52px;
+    position: relative;
+    overflow: hidden;
+    color: var(--body);
+  }
+  .invoice-wrap::before {
+    content: 'INVOICE';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotate(-20deg);
+    font-family: var(--font-display);
+    font-size: 140px;
+    font-weight: 900;
+    color: rgba(0,180,160,0.03);
+    letter-spacing: 0.15em;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .inv-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:48px; }
+  .inv-logo { font-family:var(--font-display); font-size:32px; font-weight:900; color: var(--navy); letter-spacing:-0.01em; line-height:1; }
+  .inv-logo em { color: var(--gold); font-style: normal; }
+  .inv-tagline { font-family:var(--font-mono); font-size:11px; color:var(--muted); letter-spacing:0.18em; text-transform:uppercase; margin-top:6px; }
+  .inv-meta { text-align:right; }
+  .inv-num { font-family:var(--font-display); font-size:24px; font-weight:900; color:var(--navy); }
+  .inv-date { font-family:var(--font-mono); font-size:12px; color:var(--muted); margin-top:8px; }
+  .inv-divider { height:1px; background:var(--border); margin:28px 0 36px; }
+  .inv-parties { display:grid; grid-template-columns:1fr 1fr; gap:48px; margin-bottom:48px; }
+  .inv-party-label { font-family:var(--font-mono); font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:var(--gold); margin-bottom:12px; }
+  .inv-party-name { font-family:var(--font-display); font-size:18px; font-weight:800; color:var(--navy); margin-bottom:6px; }
+  .inv-party-detail { font-size:14px; color:var(--muted); line-height:1.7; }
+  .editable { background:transparent; border:none; border-bottom:1px dashed var(--border); color:inherit; font:inherit; width:100%; outline:none; padding:2px 0; transition:border-color 0.2s; }
+  .editable:focus { border-bottom-color:var(--gold); }
+  .editable::placeholder { color:var(--muted); opacity:0.4; }
+  .inv-table { width:100%; border-collapse:collapse; margin-bottom:32px; }
+  .inv-table thead tr { background:var(--navy); }
+  .inv-table th { font-family:var(--font-mono); font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold); padding:14px 20px; text-align:left; font-weight:400; }
+  .inv-table th:last-child { text-align:right; }
+  .inv-table td { padding:18px 20px; font-size:15px; color:var(--body); border-bottom:1px solid var(--border); vertical-align:top; }
+  .inv-table td:last-child { text-align:right; color:var(--gold); font-family:var(--font-display); font-size:18px; font-weight:800; }
+  .inv-table td strong { color: var(--navy); display: block; margin-bottom: 2px; }
+  .inv-table td small { display:block; color:var(--muted); font-size:13px; margin-top:6px; line-height:1.7; }
+  .inv-totals { display:flex; flex-direction:column; align-items:flex-end; gap:10px; margin-bottom:48px; }
+  .inv-total-row { display:flex; gap:64px; font-size:15px; color:var(--muted); }
+  .inv-total-row.final { font-family:var(--font-display); font-size:28px; font-weight:900; color:var(--navy); padding-top:16px; border-top:1px solid var(--border); margin-top:6px; }
+  .inv-total-row.final span:last-child { color:var(--gold); }
+  .inv-terms {
+    background: var(--bg);
+    border-left: 4px solid var(--gold);
+    padding: 24px 28px;
+    margin-bottom: 36px;
+  }
+  .inv-terms-label { font-family:var(--font-mono); font-size:11px; letter-spacing:0.15em; text-transform:uppercase; color:var(--gold); margin-bottom:12px; }
+  .inv-terms p { font-size:14px; color:var(--muted); line-height:1.9; }
+  .inv-terms .disclaimer {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.8;
+    letter-spacing: 0.03em;
+  }
+  .inv-footer { display:flex; justify-content:space-between; align-items:flex-end; }
+  .inv-pay-label { font-family:var(--font-mono); font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold); margin-bottom:8px; }
+  .inv-status { font-family:var(--font-display); font-size:14px; font-weight:800; letter-spacing:0.15em; text-transform:uppercase; padding:8px 18px; border:2px solid; }
+  .inv-status.due { color:var(--gold); border-color:var(--gold); }
+  .inv-status.paid { color:var(--green); border-color:var(--green); }
+  
+  .btn-row { display:flex; gap:12px; margin-top:32px; padding: 0 40px; }
+  .btn { font-family:var(--font-display); font-weight:800; font-size:15px; letter-spacing:0.12em; text-transform:uppercase; padding:14px 28px; cursor:pointer; border:none; transition:all 0.2s; }
+  .btn-gold { background:var(--gold); color:var(--navy); }
+  .btn-gold:hover { background:var(--gold-light); }
+  .btn-outline { background:transparent; border:1px solid var(--border); color:var(--muted); }
+  .btn-outline:hover { border-color:var(--gold); color:var(--gold); }
+
+  /* CHECKLIST */
+  .checklist-wrap { display:grid; gap:8px; margin-top:8px; }
+  .check-item {
+    display:flex; gap:12px; align-items:flex-start;
+    padding:14px 18px;
+    background:var(--navy-light);
+    border:1px solid var(--border);
+    font-size:14px;
+    color:var(--body);
+    line-height:1.5;
+    cursor:pointer;
+    transition: all 0.2s;
+  }
+  .check-item:hover { border-color:var(--gold); }
+  .check-item.checked { background: var(--gold-dim); border-color: var(--gold); }
+  .check-item.checked .check-box { background:var(--gold); border-color:var(--gold); color:var(--navy); }
+  .check-box {
+    width:18px; height:18px; flex-shrink:0;
+    border:2px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    font-size:10px; margin-top:1px;
+    transition: all 0.2s;
+    background: var(--navy-light);
+  }
+
+  @media print {
+    body { background:white; color:black; }
+    .tabs { display:none; }
+    .panel { display:block !important; }
+    .btn-row { display:none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ZOOM CONTROLS -->
+  <div class="zoom-controls">
+    <div class="zoom-info" id="zoom-level">100%</div>
+    <button class="zoom-btn" onclick="adjustZoom(-0.1)" title="Zoom Out">-</button>
+    <button class="zoom-btn" onclick="adjustZoom(0.1)" title="Zoom In">+</button>
+    <button class="zoom-btn" onclick="resetZoom()" title="Reset" style="font-size:10px;">RESET</button>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('positioning', this)">Positioning Rules</button>
+    <button class="tab" onclick="switchTab('emails', this)">Email Sequence</button>
+    <button class="tab" onclick="switchTab('responses', this)">Response Scripts</button>
+    <button class="tab" onclick="switchTab('invoice', this)">Invoice</button>
+    <button class="tab" onclick="switchTab('checklist', this)">Pre-Send Checklist</button>
+  </div>
+
+  <!-- ══ POSITIONING ══ -->
+  <div id="positioning" class="panel active">
+    <div class="section-header"><h2>The Core Positioning Rule</h2><div class="line"></div></div>
+
+    <div style="background:var(--navy-light);border:1px solid var(--border);padding:24px 28px;margin-bottom:24px;border-left:4px solid var(--gold);">
+      <p style="font-family:var(--font-display);font-size:20px;font-weight:800;color:var(--gold);line-height:1.5;margin-bottom:12px;">"We handle the posting. What happens after is on you."</p>
+      <p style="font-size:16px;color:var(--muted);line-height:1.9;">You are selling a <strong style="color:var(--navy);">done-for-you content posting service</strong> — not a marketing strategy, not a lead generation system, not a growth guarantee. The product is consistency and relief from the frustration of never posting. That's it. That's the whole thing.</p>
+    </div>
+
+    <div class="positioning-box">
+      <div class="pos-label">What we sell vs. what we don't</div>
+      <div class="pos-grid">
+        <div>
+          <div class="pos-col-label yes">✓ We Sell This</div>
+          <div class="pos-item"><span class="icon" style="color:var(--green);">→</span> 20 on-brand posts delivered every month</div>
+          <div class="pos-item"><span class="icon" style="color:var(--green);">→</span> Content that looks like your business</div>
+          <div class="pos-item"><span class="icon" style="color:var(--green);">→</span> Consistent presence without the work</div>
+          <div class="pos-item"><span class="icon" style="color:var(--green);">→</span> Never stressing about what to post</div>
+          <div class="pos-item"><span class="icon" style="color:var(--green);">→</span> Friday delivery, every week, done</div>
+        </div>
+        <div>
+          <div class="pos-col-label no">✗ We Don't Sell This</div>
+          <div class="pos-item"><span class="icon" style="color:#f87171;">→</span> New customers or leads</div>
+          <div class="pos-item"><span class="icon" style="color:#f87171;">→</span> Follower growth guarantees</div>
+          <div class="pos-item"><span class="icon" style="color:#f87171;">→</span> Engagement rate promises</div>
+          <div class="pos-item"><span class="icon" style="color:#f87171;">→</span> Social media marketing strategy</div>
+          <div class="pos-item"><span class="icon" style="color:#f87171;">→</span> ROI or revenue outcomes</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid;gap:10px;">
+      <div style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.15em;color:var(--gold);text-transform:uppercase;margin-bottom:4px;">Language Swap Guide</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);">
+        <div style="background:var(--navy-light);border:1px solid var(--border);padding:12px 16px;">
+          <div style="font-family:var(--font-mono);font-size:11px;color:var(--red);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;">Never Say</div>
+          <div style="font-size:15px;color:var(--muted);">"Grow your business with social media"</div>
+        </div>
+        <div style="background:var(--navy-light);border:1px solid var(--border);padding:12px 16px;">
+          <div style="font-family:var(--font-mono);font-size:11px;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;">Say This Instead</div>
+          <div style="font-size:15px;color:var(--body);">"Stay visible without doing the work"</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);">
+        <div style="background:var(--navy-light);border:1px solid var(--border);padding:12px 16px;">
+          <div style="font-family:var(--font-mono);font-size:11px;color:var(--red);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;">Never Say</div>
+          <div style="font-size:15px;color:var(--muted);">"Attract more clients from social"</div>
+        </div>
+        <div style="background:var(--navy-light);border:1px solid var(--border);padding:12px 16px;">
+          <div style="font-family:var(--font-mono);font-size:11px;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;">Say This Instead</div>
+          <div style="font-size:15px;color:var(--body);">"Your feed stays active whether you post or not"</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);">
+        <div style="background:var(--navy-light);border:1px solid var(--border);padding:12px 16px;">
+          <div style="font-family:var(--font-mono);font-size:11px;color:var(--red);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;">Never Say</div>
+          <div style="font-size:15px;color:var(--muted);">"Boost your engagement and reach"</div>
+        </div>
+        <div style="background:var(--navy-light);border:1px solid var(--border);padding:12px 16px;">
+          <div style="font-family:var(--font-mono);font-size:11px;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;">Say This Instead</div>
+          <div style="font-size:15px;color:var(--body);">"20 posts a month, on-brand, delivered Friday"</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);">
+        <div style="background:var(--navy-light);border:1px solid var(--border);padding:12px 16px;">
+          <div style="font-family:var(--font-mono);font-size:11px;color:var(--red);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;">Never Say</div>
+          <div style="font-size:15px;color:var(--muted);">"We'll help you get more customers"</div>
+        </div>
+        <div style="background:var(--navy-light);border:1px solid var(--border);padding:12px 16px;">
+          <div style="font-family:var(--font-mono);font-size:11px;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;">Say This Instead</div>
+          <div style="font-size:15px;color:var(--body);">"We take the posting off your plate. That's it."</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ EMAILS ══ -->
+  <div id="emails" class="panel">
+    <div class="section-header"><h2>3-Email Outreach Sequence</h2><div class="line"></div></div>
+
+    <div style="background:var(--gold-dim);border-left:3px solid var(--gold);padding:14px 18px;margin-bottom:28px;font-size:15px;color:var(--body);line-height:1.8;">
+      <strong style="color:var(--gold);">Personalization Brief (Realtors / Brokerages)</strong><br>
+      <span style="color:var(--muted);">Trigger:</span> Their social feed is inactive, inconsistent, or clearly generic &nbsp;·&nbsp;
+      <span style="color:var(--muted);">Pain:</span> They know they should post but never do &nbsp;·&nbsp;
+      <span style="color:var(--muted);">Bridge:</span> You already made their content — they see it before they commit
+    </div>
+
+    <div class="email-stack">
+
+      <div class="email-card">
+        <div class="email-card-header">
+          <div>
+            <div class="email-day">Email 1 · Day 1</div>
+            <div class="email-subject">Subject: made something for {{companyName}}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="email-wordcount">~75 words</div>
+            <button class="copy-btn" onclick="copyEmail(this)">Copy</button>
+          </div>
+        </div>
+        <div class="email-body">Hi {{firstName}},
+
+Most realtors and brokerage owners I talk to have the same Saturday morning moment — they sit down to write posts, stare at a blank screen for 20 minutes, then just close the tab.
+
+I already created two weeks of content for you, fully matched to {{companyName}}'s brand.
+
+I want to send it over to you — no charge whatsoever, no strings, no sales pitch. Just a free 2-week sample so you can see what it's like when your feed is actually consistent.
+
+Want me to send it over?
+
+— John</div>
+        <div class="email-note">WHY IT WORKS: The "Saturday morning" scene hits before the pitch — prospect recognizes themselves in it. No promise of results. No mention of growth or leads. The ask is a yes/no — lowest friction possible.</div>
+      </div>
+
+      <div class="email-card">
+        <div class="email-card-header">
+          <div>
+            <div class="email-day">Email 2 · Day 3</div>
+            <div class="email-subject">Subject: re: made something for {{companyName}}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="email-wordcount">~90 words</div>
+            <button class="copy-btn" onclick="copyEmail(this)">Copy</button>
+          </div>
+        </div>
+        <div class="email-body">Hi {{firstName}},
+
+Still have those 2 weeks of content ready for you.
+
+I have a client who told me she used to spend every Sunday night stressing about what to post that week. First Monday after she signed up, she spent that time on an actual client call instead. That's the whole point.
+
+I handle the posting. 20 on-brand posts a month, delivered every Friday. You don't have to think about it, write it, or design it.
+
+I'm not promising you new clients — I'm promising you a consistent feed. $497/month.
+
+Want the free content?
+
+— John</div>
+        <div class="email-note">WHY IT WORKS: The client story is one sentence and immediately concrete — Sunday stress vs. a real client call. Then the positioning line lands harder: "I'm not promising you new clients — I'm promising you a consistent feed." Disarms skepticism, sets honest expectations.</div>
+      </div>
+
+      <div class="email-card">
+        <div class="email-card-header">
+          <div>
+            <div class="email-day">Email 3 · Day 7</div>
+            <div class="email-subject">Subject: closing the loop</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="email-wordcount">~65 words</div>
+            <button class="copy-btn" onclick="copyEmail(this)">Copy</button>
+          </div>
+        </div>
+        <div class="email-body">Hi {{firstName}},
+
+Last note.
+
+Somewhere between the client calls, the invoices, and everything else running through your head this week — posting to social probably didn't make the list. It rarely does.
+
+If you ever get tired of your feed sitting empty while the rest of the business moves, I'm one reply away.
+
+The free content I built for you is still here.
+
+— John</div>
+        <div class="email-note">WHY IT WORKS: Opens with a true-to-life scene — no accusations, just recognition. "It rarely does" is empathy, not pressure. Closes the door gently with the free content as a soft re-entry point.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ RESPONSES ══ -->
+  <div id="responses" class="panel">
+    <div class="section-header"><h2>Response Scripts</h2><div class="line"></div></div>
+
+    <div class="response-grid">
+
+      <div class="response-card">
+        <div class="response-header">
+          <div class="response-type">They're Interested — "Send it over" / "Tell me more"</div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="response-tag tag-positive">Positive</div>
+            <button class="copy-btn" onclick="copyResponse(this)">Copy</button>
+          </div>
+        </div>
+        <div class="response-body">Hi {{firstName}},
+
+Sending the content now — take a look and see how it feels.
+
+Here's exactly what you get for $497/month:
+· 20 on-brand posts per month
+· 5 posts delivered every Friday
+· Captions and visuals matched to your brand
+· No contract — cancel anytime with a week's notice
+
+I handle the posting side. What you do with it on your end is up to you.
+
+Ready to get started? I'll send the invoice today.
+
+— John</div>
+      </div>
+
+      <div class="response-card">
+        <div class="response-header">
+          <div class="response-type">Objections</div>
+          <div class="response-tag tag-objection">Handle</div>
+        </div>
+        <div class="response-body"><div class="objection-sub">"Will this actually bring in new customers?"</div>Honest answer — that's not what I sell. I deliver consistent, on-brand posts to your feed every week. Whether that turns into new customers depends on your offer, your market, and how you engage with it. What I can promise is your feed won't be sitting empty anymore. That part I control completely.
+
+<div class="objection-sub">"We already post sometimes"</div>Totally fair. Most businesses do — just not consistently. The frustration isn't usually starting, it's keeping up with it when you're busy. That's the problem I solve. You keep doing what you're doing, I make sure the posting never falls off.
+
+<div class="objection-sub">"$497 feels like a lot"</div>It's about $25 a post. Most businesses spend more than that trying to throw something together last minute — or they just don't post at all. I'm not promising it pays for itself in new business. I'm saying your feed stays active and on-brand every single week without you touching it. That's the value.
+
+<div class="objection-sub">"What if I don't like the content?"</div>You see everything before it goes anywhere. You can give feedback, request changes, or skip a week. I'm handling the execution — you stay in control of what actually goes out.</div>
+      </div>
+
+      <div class="response-card">
+        <div class="response-header">
+          <div class="response-type">Not Interested</div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="response-tag tag-no">Rejection</div>
+            <button class="copy-btn" onclick="copyResponse(this)">Copy</button>
+          </div>
+        </div>
+        <div class="response-body">No worries at all — appreciate you letting me know.
+
+If the posting ever becomes one of those things that keeps falling to the bottom of the list, you know where to find me.
+
+— John</div>
+      </div>
+
+      <div class="response-card">
+        <div class="response-header">
+          <div class="response-type">No Response After All 3 Emails</div>
+          <div class="response-tag tag-silence">Silence</div>
+        </div>
+        <div class="response-body">Archive. Do not send a 4th email.
+
+Mark as "sequence complete — no reply" in your tracker.
+Revisit in 60–90 days only if you see a new trigger:
+· They start posting again then go quiet
+· New location or service announced
+· A seasonal moment relevant to their business</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ INVOICE ══ -->
+  <div id="invoice" class="panel">
+    <div class="invoice-wrap">
+
+      <div class="inv-header">
+        <div>
+          <div class="inv-logo">ALL WAYS <em>POSTED</em></div>
+          <div class="inv-tagline">White Label Fulfillment Dashboard</div>
+        </div>
+        <div class="inv-meta">
+          <div class="inv-num">INV-<input class="editable" style="width:100px;font-family:var(--font-display);font-size:24px;font-weight:900;color:var(--navy);" value="2026-001" /></div>
+          <div class="inv-date">Date: <span id="inv-date"></span></div>
+          <div class="inv-date">Due: <span id="due-date"></span></div>
+        </div>
+      </div>
+
+      <div class="inv-divider"></div>
+
+      <div class="inv-parties">
+        <div>
+          <div class="inv-party-label">From</div>
+          <div class="inv-party-name">All Ways Posted</div>
+          <div class="inv-party-detail">Agency Partner Fulfillment Dept.<br>partners@allwaysposted.com</div>
+        </div>
+        <div>
+          <div class="inv-party-label">Bill To</div>
+          <input class="editable inv-party-name" placeholder="Agency / Client Name" style="font-family:var(--font-display);font-size:18px;font-weight:800;" />
+          <div style="margin-top:8px;">
+            <input class="editable" placeholder="Contact Person" style="font-size:14px;color:var(--muted);display:block;margin-bottom:4px;" />
+            <input class="editable" placeholder="Email Address" style="font-size:14px;color:var(--muted);display:block;margin-bottom:4px;" />
+            <input class="editable" placeholder="City, State" style="font-size:14px;color:var(--muted);display:block;" />
+          </div>
+        </div>
+      </div>
+
+      <table class="inv-table">
+        <thead>
+          <tr>
+            <th style="width:52%;">Service</th>
+            <th>Qty</th>
+            <th>Rate</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <strong>Monthly Social Content Posting Pack</strong>
+              <small>20 on-brand social posts per month · 5 posts delivered every Friday · Captions + branded visuals · Content creation and delivery only — does not include social media account management, advertising, community management, or marketing strategy</small>
+            </td>
+            <td>1</td>
+            <td><span style="font-family:var(--font-mono);color:var(--gold-light);">$497</span></td>
+            <td>$497.00</td>
+          </tr>
+          <tr>
+            <td>
+              Brand DNA Profile Setup
+              <small>One-time setup — brand colors, fonts, tone extracted from client website. Included at no charge.</small>
+            </td>
+            <td>1</td>
+            <td><span style="font-family:'Space Mono',monospace;">$0</span></td>
+            <td style="color:var(--muted)!important;">Included</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="inv-totals">
+        <div class="inv-total-row"><span>Subtotal</span><span style="font-family:'Space Mono',monospace;">$497.00</span></div>
+        <div class="inv-total-row final"><span>Total Due</span><span>$497.00</span></div>
+      </div>
+
+      <div class="inv-terms">
+        <div class="inv-terms-label">Terms of Service</div>
+        <p>Payment due upon receipt. Month-to-month — no long-term contract. Cancel anytime with 7 days written notice. Content delivery begins within 3 business days of payment confirmation.</p>
+        <div class="disclaimer">
+          SERVICE SCOPE DISCLAIMER: This service provides social media content creation and delivery only. All Ways Posted does not manage social media accounts, run paid advertising, or provide marketing strategy. This service makes no guarantees regarding follower growth, engagement rates, lead generation, website traffic, or revenue outcomes. Results from posted content depend entirely on factors outside the scope of this service including but not limited to: offer quality, audience size, platform algorithms, and market conditions. Client is responsible for reviewing and approving all content prior to use and for posting content to their own platforms unless a separate posting arrangement has been agreed upon in writing.
+        </div>
+      </div>
+
+      <div class="inv-footer">
+        <div>
+          <div class="inv-pay-label">Remit Payment To</div>
+          <input class="editable" placeholder="Payment link (Stripe / PayPal / etc)" style="font-family:var(--font-display);font-size:16px;font-weight:800;width:320px;" />
+        </div>
+        <div class="inv-status due" id="inv-status">Payment Due</div>
+      </div>
+
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-gold" onclick="window.print()">Print / Save PDF</button>
+      <button class="btn btn-outline" onclick="document.getElementById('inv-status').className='inv-status paid';document.getElementById('inv-status').textContent='PAID';">Mark Paid</button>
+    </div>
+  </div>
+
+  <!-- ══ CHECKLIST ══ -->
+  <div id="checklist" class="panel">
+    <div class="section-header"><h2>Pre-Send Checklist</h2><div class="line"></div></div>
+    <p style="font-size:15px;color:var(--muted);margin-bottom:24px;line-height:1.7;">Run this before sending Email 1 to any prospect. Click each item to check it off.</p>
+
+    <div style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.12em;color:var(--gold);text-transform:uppercase;margin-bottom:12px;">Content & Positioning</div>
+    <div class="checklist-wrap" id="cl1">
+      <div class="check-item" onclick="toggle(this)"><div class="check-box"></div>You actually built their 2-week sample content in Pomelli BEFORE sending Email 1</div>
+      <div class="check-item" onclick="toggle(this)"><div class="check-box"></div>Zero promises of leads, growth, followers, or revenue anywhere in the sequence</div>
+      <div class="check-item" onclick="toggle(this)"><div class="check-box"></div>The word "marketing" does not appear unless it's to say what you don't do</div>
+      <div class="check-item" onclick="toggle(this)"><div class="check-box"></div>Every email sells relief from the posting frustration — not business outcomes</div>
+    </div>
+
+    <div style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.12em;color:var(--gold);text-transform:uppercase;margin:24px 0 12px;">Copy & Format</div>
+    <div class="checklist-wrap">
+      <div class="check-item" onclick="toggle(this)"><div class="check-box"></div>Business name spelled correctly in every email</div>
+      <div class="check-item" onclick="toggle(this)"><div class="check-box"></div>Subject lines are all lowercase, under 7 words</div>
+      <div class="check-item" onclick="toggle(this)"><div class="check-box"></div>One CTA per email — no stacking asks</div>
+      <div class="check-item" onclick="toggle(this)"><div class="check-box"></div>No "hope this finds you well" or any filler opener</div>
+      <div class="check-item" onclick="toggle(this)"><div class="check-box"></div>No file attachments in Email 1 (spam filter risk)</div>
+      <div class="check-item" onclick="toggle(this)"><div class="check-box"></div>Each email is under 90 words</div>
+    </div>
+
+    <div style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.12em;color:var(--gold);text-transform:uppercase;margin:24px 0 12px;">Invoice</div>
+    <div class="checklist-wrap">
+      <div class="check-item" onclick="toggle(this)"><div class="check-box"></div>Service description says "content creation and delivery only"</div>
+      <div class="check-item" onclick="toggle(this)"><div class="check-box"></div>Disclaimer is visible and clearly excludes results guarantees</div>
+      <div class="check-item" onclick="toggle(this)"><div class="check-box"></div>Payment link is filled in before sending</div>
+      <div class="check-item" onclick="toggle(this)"><div class="check-box"></div>Client name and email are correct</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const today = new Date();
+  const due = new Date(today);
+  due.setDate(due.getDate() + 7);
+  const fmt = d => d.toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+  document.getElementById('inv-date').textContent = fmt(today);
+  document.getElementById('due-date').textContent = fmt(due);
+
+  function switchTab(id, el) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    el.classList.add('active');
+  }
+
+  function copyEmail(btn) {
+    const card = btn.closest('.email-card');
+    const body = card.querySelector('.email-body');
+    navigator.clipboard.writeText(body.innerText).then(() => {
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  function copyResponse(btn) {
+    const card = btn.closest('.response-card');
+    const body = card.querySelector('.response-body');
+    navigator.clipboard.writeText(body.innerText).then(() => {
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  function toggle(el) {
+    el.classList.toggle('checked');
+    el.querySelector('.check-box').textContent = el.classList.contains('checked') ? '✓' : '';
+  }
+
+  let currentZoom = 1.3; // Default to larger size for better readability
+  const page = document.querySelector('.page');
+  const zoomDisplay = document.getElementById('zoom-level');
+
+  function adjustZoom(delta) {
+    currentZoom = Math.min(Math.max(0.5, currentZoom + delta), 3.0);
+    updateZoom();
+  }
+
+  function resetZoom() {
+    currentZoom = 1.3;
+    updateZoom();
+  }
+
+  function updateZoom() {
+    document.body.style.zoom = currentZoom;
+    zoomDisplay.textContent = Math.round(currentZoom * 100) + '%';
+  }
+
+  // Set initial zoom
+  updateZoom();
+</script>
+</body>
+</html>

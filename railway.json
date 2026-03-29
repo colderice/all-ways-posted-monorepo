@@ -1,0 +1,12 @@
+{
+  "$schema": "https://railway.app/v1.schema.json",
+  "build": {
+    "builder": "NIXPACKS",
+    "rootDirectory": "audit-app"
+  },
+  "deploy": {
+    "numReplicas": 1,
+    "sleepOnIdle": false,
+    "rootDirectory": "audit-app"
+  }
+}

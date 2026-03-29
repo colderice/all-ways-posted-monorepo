@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brand Presence Audit — JohnLawson.com | All Ways Posted</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #C4982E;
+            --gold-light: #E0B44C;
+            --gold-dark: #A67B1B;
+            --navy: #1E2B3C;
+            --navy-light: #2D3E55;
+            --navy-dark: #121B27;
+            --white: #FFFFFF;
+            --warm-gray: #F5F2EE;
+            --slate-100: #F1F5F9;
+            --slate-200: #E2E8F0;
+            --slate-300: #CBD5E1;
+            --slate-400: #94A3B8;
+            --slate-500: #64748B;
+            --font-heading: 'Barlow Condensed', sans-serif;
+            --font-body: 'DM Sans', sans-serif;
+            --grade-a: #16a34a;
+            --grade-b: #65a30d;
+            --grade-c: #b45309;
+            --grade-d: #c2410c;
+            --grade-f: #b91c1c;
+            --pass: #16a34a;
+            --warn: #b45309;
+            --fail: #dc2626;
+            --critical: #b91c1c;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--warm-gray);
+            color: var(--navy);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: var(--font-heading);
+            text-transform: uppercase;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .page { max-width: 960px; margin: 0 auto; padding: 0 2rem 4rem; }
+
+        /* ── HEADER ── */
+        .report-header {
+            background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 60%, #1a2f47 100%);
+            border-bottom: 3px solid var(--gold);
+            padding: 3rem 3rem 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .report-header::before {
+            content: '';
+            position: absolute;
+            top: -60px; right: -60px;
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(196,152,46,0.12) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .header-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2.5rem; }
+        .logo-area { display: flex; align-items: center; gap: 14px; }
+        .logo-area img { height: 48px; width: auto; }
+        .logo-text { font-family: var(--font-heading); font-size: 1.3rem; letter-spacing: 0.12em; color: var(--white); text-transform: uppercase; font-weight: 800; }
+        .report-badge { background: rgba(196,152,46,0.15); border: 1px solid rgba(196,152,46,0.4); padding: 0.5rem 1.25rem; border-radius: 50px; font-family: var(--font-heading); font-size: 0.8rem; letter-spacing: 0.2em; color: var(--gold-light); text-transform: uppercase; }
+        .report-title { font-size: 3.5rem; letter-spacing: 0.05em; color: var(--white); margin-bottom: 0.5rem; }
+        .report-subtitle { font-family: var(--font-body); font-size: 1rem; color: var(--slate-300); font-weight: 400; }
+        .client-meta { display: flex; gap: 3rem; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); flex-wrap: wrap; }
+        .meta-item label { font-family: var(--font-heading); font-size: 0.7rem; letter-spacing: 0.2em; color: var(--gold); display: block; margin-bottom: 0.25rem; text-transform: uppercase; }
+        .meta-item span { font-size: 1rem; font-weight: 500; color: var(--white); }
+
+        /* ── CRITICAL ALERT BANNER ── */
+        .critical-banner {
+            background: #fef2f2;
+            border: 2px solid #fca5a5;
+            border-left: 5px solid #dc2626;
+            border-radius: 10px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        .critical-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 0.1rem; }
+        .critical-text strong { display: block; color: #b91c1c; font-family: var(--font-heading); font-size: 1rem; letter-spacing: 0.05em; margin-bottom: 0.3rem; text-transform: uppercase; }
+        .critical-text p { font-size: 0.88rem; color: #7f1d1d; line-height: 1.5; }
+
+        /* ── CONTENT SECTIONS ── */
+        .content { padding: 3rem 0; }
+        .section { margin-bottom: 3rem; }
+        .section-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid rgba(196,152,46,0.3); }
+        .section-num { background: var(--gold); color: var(--navy-dark); font-family: var(--font-heading); font-size: 1rem; font-weight: 900; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .section-title { font-family: var(--font-heading); font-size: 1.6rem; letter-spacing: 0.05em; color: var(--navy); }
+
+        /* ── METRICS GRID ── */
+        .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2.5rem; }
+        .metric-card { background: #FFFFFF; border: 1px solid var(--slate-200); border-radius: 12px; padding: 1.5rem 1.25rem; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+        .metric-value { font-family: var(--font-heading); font-size: 2.4rem; font-weight: 900; color: var(--gold-dark); line-height: 1; margin-bottom: 0.4rem; }
+        .metric-value.pass { color: var(--pass); }
+        .metric-value.warn { color: var(--warn); }
+        .metric-value.fail { color: var(--fail); }
+        .metric-label { font-size: 0.78rem; color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.1em; font-family: var(--font-heading); }
+
+        /* ── OVERALL SCORE ── */
+        .overall-score-bar { background: #FFFFFF; border: 1px solid var(--slate-200); border-radius: 16px; padding: 2rem; display: flex; align-items: center; gap: 3rem; margin-bottom: 2.5rem; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+        .big-grade { font-family: var(--font-heading); font-size: 6rem; font-weight: 900; line-height: 1; min-width: 100px; text-align: center; }
+        .grade-a { color: var(--grade-a); }
+        .grade-b { color: var(--grade-b); }
+        .grade-c { color: var(--grade-c); }
+        .grade-d { color: var(--grade-d); }
+        .grade-f { color: var(--grade-f); }
+        .score-breakdown { flex: 1; }
+        .score-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.75rem; }
+        .score-label { font-family: var(--font-heading); font-size: 0.9rem; letter-spacing: 0.08em; color: var(--slate-500); width: 200px; flex-shrink: 0; }
+        .score-bar-track { flex: 1; background: var(--slate-200); border-radius: 50px; height: 8px; overflow: hidden; }
+        .score-bar-fill { height: 100%; border-radius: 50px; background: var(--gold); }
+        .score-grade { font-family: var(--font-heading); font-size: 1rem; font-weight: 900; width: 28px; text-align: right; }
+
+        /* ── AUDIT TABLE ── */
+        .audit-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+        .audit-table th { font-family: var(--font-heading); font-size: 0.75rem; letter-spacing: 0.15em; color: var(--slate-500); text-transform: uppercase; text-align: left; padding: 0.75rem 1rem; border-bottom: 2px solid var(--slate-200); background: var(--slate-100); }
+        .audit-table td { padding: 0.9rem 1rem; border-bottom: 1px solid var(--slate-100); font-size: 0.9rem; color: #475569; vertical-align: top; background: #FFFFFF; }
+        .audit-table tr:last-child td { border-bottom: none; }
+        .audit-table tr:hover td { background: var(--slate-100); }
+        .check-name { color: var(--navy); font-weight: 600; }
+        .finding { color: var(--slate-500); font-size: 0.85rem; }
+        .finding strong { color: #b91c1c; font-weight: 600; }
+
+        /* ── STATUS BADGES ── */
+        .badge { display: inline-block; padding: 0.2rem 0.7rem; border-radius: 50px; font-family: var(--font-heading); font-size: 0.7rem; letter-spacing: 0.1em; font-weight: 800; text-transform: uppercase; }
+        .badge-pass { background: #dcfce7; color: #16a34a; border: 1px solid #bbf7d0; }
+        .badge-warn { background: #fef9c3; color: #b45309; border: 1px solid #fde68a; }
+        .badge-fail { background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; }
+        .badge-critical { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; font-weight: 900; }
+        .badge-na { background: var(--slate-100); color: var(--slate-500); border: 1px solid var(--slate-200); }
+
+        /* ── SOCIAL GRID ── */
+        .social-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+        .social-card { background: #FFFFFF; border: 1px solid var(--slate-200); border-radius: 12px; padding: 1.25rem; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+        .social-platform { font-family: var(--font-heading); font-size: 1rem; letter-spacing: 0.08em; color: var(--navy); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+        .platform-icon { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); }
+        .social-stat { display: flex; justify-content: space-between; margin-bottom: 0.3rem; }
+        .social-stat-label { font-size: 0.8rem; color: var(--slate-500); }
+        .social-stat-value { font-size: 0.85rem; color: #475569; font-weight: 500; }
+
+        /* ── EEAT SCORECARD ── */
+        .eeat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+        .eeat-card { background: #FFFFFF; border: 1px solid var(--slate-200); border-radius: 12px; padding: 1.5rem; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+        .eeat-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem; }
+        .eeat-label { font-family: var(--font-heading); font-size: 1.2rem; letter-spacing: 0.05em; color: var(--gold-dark); }
+        .eeat-grade { font-family: var(--font-heading); font-size: 2rem; font-weight: 900; line-height: 1; }
+        .eeat-evidence { font-size: 0.82rem; color: var(--slate-500); line-height: 1.5; }
+
+        /* ── ACTION PLAN ── */
+        .action-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-bottom: 1.5rem; }
+        .action-col-header { font-family: var(--font-heading); font-size: 0.8rem; letter-spacing: 0.15em; color: var(--gold-dark); text-transform: uppercase; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(196,152,46,0.3); }
+        .action-item { background: #FFFFFF; border: 1px solid var(--slate-200); border-radius: 8px; padding: 0.85rem 1rem; margin-bottom: 0.75rem; font-size: 0.85rem; color: var(--slate-500); box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+        .action-item strong { display: block; color: var(--navy); font-size: 0.9rem; margin-bottom: 0.2rem; }
+        .action-impact { margin-top: 0.4rem; font-size: 0.75rem; }
+        .action-item.urgent { border-left: 3px solid #dc2626; }
+        .action-item.urgent strong { color: #b91c1c; }
+
+        /* ── WHAT'S WORKING ── */
+        .working-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+        .working-item { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 1.1rem 1.25rem; }
+        .working-item strong { display: block; color: #16a34a; font-size: 0.9rem; font-family: var(--font-heading); letter-spacing: 0.05em; margin-bottom: 0.3rem; }
+        .working-item p { font-size: 0.85rem; color: #4b7a57; }
+
+        /* ── CTA ── */
+        .cta-block { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%); border: 3px solid var(--gold); border-radius: 16px; padding: 2.5rem; text-align: center; margin-top: 3rem; }
+        .cta-block h2 { font-size: 2.2rem; color: var(--white); margin-bottom: 1rem; }
+        .cta-block p { color: var(--slate-300); font-size: 1rem; max-width: 560px; margin: 0 auto 1.75rem; }
+        .cta-btn { display: inline-block; background: var(--gold); color: var(--navy-dark); font-family: var(--font-heading); font-size: 1.1rem; letter-spacing: 0.1em; font-weight: 900; padding: 1rem 2.5rem; border-radius: 50px; text-decoration: none; text-transform: uppercase; }
+
+        /* ── DISCLAIMER ── */
+        .disclaimer { border-top: 1px solid var(--slate-200); padding-top: 2rem; margin-top: 3rem; font-size: 0.75rem; color: var(--slate-400); line-height: 1.6; }
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="report-header">
+    <div style="max-width: 960px; margin: 0 auto; padding: 0 2rem;">
+        <div class="header-top">
+            <div class="logo-area">
+                <img src="assets/AWP_Logo.png" alt="All Ways Posted">
+                <div class="logo-text">All Ways Posted</div>
+            </div>
+            <div class="report-badge">Brand Presence Audit</div>
+        </div>
+        <h1 class="report-title">Brand Presence<br>Audit Report</h1>
+        <p class="report-subtitle">Live site analysis, social media inspection, and Google visibility check — conducted using publicly available data, no paid tools.</p>
+        <div class="client-meta">
+            <div class="meta-item"><label>Business</label><span>John Lawson / ColderICE Media</span></div>
+            <div class="meta-item"><label>Website</label><span>johnlawson.com</span></div>
+            <div class="meta-item"><label>Industry</label><span>AI Strategy Consulting / Speaking</span></div>
+            <div class="meta-item"><label>Audit Date</label><span>March 28, 2026</span></div>
+            <div class="meta-item"><label>Prepared By</label><span>All Ways Posted</span></div>
+        </div>
+    </div>
+</div>
+
+<div class="page">
+<div class="content">
+
+    <!-- CRITICAL ALERTS -->
+    <div style="margin-top: 2.5rem;">
+        <div class="critical-banner">
+            <div class="critical-icon">🚨</div>
+            <div class="critical-text">
+                <strong>Critical: Lorem Ipsum Found on Live Indexed Page</strong>
+                <p>The /about/ page contains placeholder lorem ipsum text and is indexed by Google. Anyone who finds you in search and clicks your About page sees gibberish. This is actively damaging credibility right now.</p>
+            </div>
+        </div>
+        <div class="critical-banner">
+            <div class="critical-icon">🚨</div>
+            <div class="critical-text">
+                <strong>Critical: Privacy Policy Has Unfilled Template Placeholders</strong>
+                <p>Your Privacy Policy contains "[Your Company Name]" and "[website/application/service]" — live, indexed, and visible to any visitor. Beyond looking unprofessional, an incomplete privacy policy creates legal exposure.</p>
+            </div>
+        </div>
+        <div class="critical-banner">
+            <div class="critical-icon">⚠️</div>
+            <div class="critical-text">
+                <strong>Brand Positioning Mismatch: "Business Coach" vs. AI Strategy Consultant</strong>
+                <p>Your site title tag reads "John Lawson – Business Coach." Your X bio says "Chief Marketer." Your schema says "Business Coach." None of these reflect your actual positioning as an AI Strategy Consultant and Futurist. Google is indexing the wrong brand identity.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- KEY FINDINGS -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-num">★</div>
+            <h2 class="section-title">Key Findings at a Glance</h2>
+        </div>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value warn">C</div>
+                <div class="metric-label">Overall Brand Score</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value pass">4/5</div>
+                <div class="metric-label">Platforms Active</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value fail">71</div>
+                <div class="metric-label">Pages Indexed</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value fail">3</div>
+                <div class="metric-label">Critical Issues Found</div>
+            </div>
+        </div>
+
+        <div class="overall-score-bar">
+            <div class="big-grade grade-c">C</div>
+            <div class="score-breakdown">
+                <div style="font-family: var(--font-heading); font-size: 0.75rem; letter-spacing: 0.15em; color: var(--gold-dark); margin-bottom: 1rem; text-transform: uppercase;">Score Breakdown</div>
+                <div class="score-row">
+                    <div class="score-label">Social Media Presence</div>
+                    <div class="score-bar-track"><div class="score-bar-fill" style="width: 78%; background: var(--grade-b);"></div></div>
+                    <div class="score-grade grade-b">B</div>
+                </div>
+                <div class="score-row">
+                    <div class="score-label">Website Health</div>
+                    <div class="score-bar-track"><div class="score-bar-fill" style="width: 38%; background: var(--grade-d);"></div></div>
+                    <div class="score-grade grade-d">D+</div>
+                </div>
+                <div class="score-row">
+                    <div class="score-label">Content Consistency</div>
+                    <div class="score-bar-track"><div class="score-bar-fill" style="width: 52%; background: var(--grade-c);"></div></div>
+                    <div class="score-grade grade-c">C</div>
+                </div>
+                <div class="score-row">
+                    <div class="score-label">Google Visibility</div>
+                    <div class="score-bar-track"><div class="score-bar-fill" style="width: 60%; background: var(--grade-c);"></div></div>
+                    <div class="score-grade grade-c">C+</div>
+                </div>
+                <div class="score-row">
+                    <div class="score-label">Brand Consistency</div>
+                    <div class="score-bar-track"><div class="score-bar-fill" style="width: 35%; background: var(--grade-d);"></div></div>
+                    <div class="score-grade grade-d">D+</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 1: SOCIAL MEDIA -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-num">1</div>
+            <h2 class="section-title">Social Media Presence</h2>
+        </div>
+
+        <div class="social-grid">
+            <div class="social-card">
+                <div class="social-platform"><div class="platform-icon"></div>Facebook</div>
+                <div class="social-stat"><span class="social-stat-label">Profile Found</span><span class="social-stat-value"><span class="badge badge-pass">Yes</span></span></div>
+                <div class="social-stat"><span class="social-stat-label">Handle</span><span class="social-stat-value">@JohnLawsonHQ</span></div>
+                <div class="social-stat"><span class="social-stat-label">Followers</span><span class="social-stat-value">10,471</span></div>
+                <div class="social-stat"><span class="social-stat-label">Last Post</span><span class="social-stat-value" style="color: #16a34a;">3 hours ago</span></div>
+                <div class="social-stat"><span class="social-stat-label">Bio Links to Site</span><span class="social-stat-value"><span class="badge badge-pass">Yes</span></span></div>
+                <div class="social-stat"><span class="social-stat-label">Profile Complete</span><span class="social-stat-value"><span class="badge badge-pass">Yes</span></span></div>
+            </div>
+            <div class="social-card">
+                <div class="social-platform"><div class="platform-icon"></div>LinkedIn</div>
+                <div class="social-stat"><span class="social-stat-label">Profile Found</span><span class="social-stat-value"><span class="badge badge-pass">Yes</span></span></div>
+                <div class="social-stat"><span class="social-stat-label">Handle</span><span class="social-stat-value">/in/colderice</span></div>
+                <div class="social-stat"><span class="social-stat-label">Followers</span><span class="social-stat-value">11,300+</span></div>
+                <div class="social-stat"><span class="social-stat-label">Connections</span><span class="social-stat-value">500+</span></div>
+                <div class="social-stat"><span class="social-stat-label">Bio Links to Site</span><span class="social-stat-value"><span class="badge badge-pass">Yes</span></span></div>
+                <div class="social-stat"><span class="social-stat-label">Profile Complete</span><span class="social-stat-value"><span class="badge badge-warn">Unverified</span></span></div>
+            </div>
+            <div class="social-card">
+                <div class="social-platform"><div class="platform-icon"></div>X / Twitter</div>
+                <div class="social-stat"><span class="social-stat-label">Profile Found</span><span class="social-stat-value"><span class="badge badge-pass">Yes</span></span></div>
+                <div class="social-stat"><span class="social-stat-label">Handle</span><span class="social-stat-value">@ColderICE</span></div>
+                <div class="social-stat"><span class="social-stat-label">Followers</span><span class="social-stat-value">44,700</span></div>
+                <div class="social-stat"><span class="social-stat-label">Total Posts</span><span class="social-stat-value">98,300+</span></div>
+                <div class="social-stat"><span class="social-stat-label">Recent Posts Visible</span><span class="social-stat-value"><span class="badge badge-warn">Not Showing</span></span></div>
+                <div class="social-stat"><span class="social-stat-label">Bio Links to Site</span><span class="social-stat-value"><span class="badge badge-pass">Yes</span></span></div>
+            </div>
+            <div class="social-card">
+                <div class="social-platform"><div class="platform-icon"></div>Instagram</div>
+                <div class="social-stat"><span class="social-stat-label">Profile Found</span><span class="social-stat-value"><span class="badge badge-pass">Yes</span></span></div>
+                <div class="social-stat"><span class="social-stat-label">Handle</span><span class="social-stat-value">@colderice</span></div>
+                <div class="social-stat"><span class="social-stat-label">Last Post</span><span class="social-stat-value" style="color: #16a34a;">3 days ago</span></div>
+                <div class="social-stat"><span class="social-stat-label">Posting Activity</span><span class="social-stat-value"><span class="badge badge-pass">Active</span></span></div>
+                <div class="social-stat"><span class="social-stat-label">Bio Links to Site</span><span class="social-stat-value"><span class="badge badge-warn">Unverified</span></span></div>
+                <div class="social-stat"><span class="social-stat-label">Profile Complete</span><span class="social-stat-value"><span class="badge badge-warn">Partial</span></span></div>
+            </div>
+            <div class="social-card">
+                <div class="social-platform"><div class="platform-icon"></div>YouTube</div>
+                <div class="social-stat"><span class="social-stat-label">Profile Found</span><span class="social-stat-value"><span class="badge badge-pass">Yes</span></span></div>
+                <div class="social-stat"><span class="social-stat-label">Handle</span><span class="social-stat-value">@colderice</span></div>
+                <div class="social-stat"><span class="social-stat-label">Subscribers</span><span class="social-stat-value">2,470</span></div>
+                <div class="social-stat"><span class="social-stat-label">Total Videos</span><span class="social-stat-value">500+</span></div>
+                <div class="social-stat"><span class="social-stat-label">Recent Views</span><span class="social-stat-value" style="color: #b45309;">12–35 per video</span></div>
+                <div class="social-stat"><span class="social-stat-label">Bio Links to Site</span><span class="social-stat-value"><span class="badge badge-pass">Yes</span></span></div>
+            </div>
+            <div class="social-card" style="background: #fffbeb; border-color: #fde68a;">
+                <div class="social-platform" style="color: var(--gold-dark);">Summary</div>
+                <div class="social-stat"><span class="social-stat-label">Platforms Found</span><span class="social-stat-value">5 of 5</span></div>
+                <div class="social-stat"><span class="social-stat-label">Active Platforms</span><span class="social-stat-value" style="color: #16a34a;">4 of 5</span></div>
+                <div class="social-stat"><span class="social-stat-label">Combined Following</span><span class="social-stat-value">~69,000+</span></div>
+                <div class="social-stat"><span class="social-stat-label">Homepage Links To</span><span class="social-stat-value" style="color: #dc2626;">LinkedIn Only</span></div>
+                <div class="social-stat" style="margin-top: 0.5rem;"><span class="social-stat-label">Overall Grade</span><span class="social-stat-value" style="font-family: var(--font-heading); font-size: 1.2rem; color: #65a30d; font-weight: 900;">B</span></div>
+            </div>
+        </div>
+
+        <div class="critical-banner" style="margin-top: 0.5rem;">
+            <div class="critical-icon">⚠️</div>
+            <div class="critical-text">
+                <strong>Homepage Only Links to LinkedIn — Three Times</strong>
+                <p>Facebook (10K followers), X (44.7K followers), Instagram, and YouTube are completely absent from the homepage. All that social equity is invisible to site visitors.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 2: WEBSITE HEALTH -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-num">2</div>
+            <h2 class="section-title">Website Health Check</h2>
+        </div>
+
+        <table class="audit-table">
+            <thead>
+                <tr>
+                    <th style="width: 30%;">Check</th>
+                    <th style="width: 15%;">Status</th>
+                    <th>Finding</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="check-name">HTTPS / SSL</span></td>
+                    <td><span class="badge badge-pass">Pass</span></td>
+                    <td class="finding">Site loads securely over HTTPS. Certificate is valid.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Title Tag</span></td>
+                    <td><span class="badge badge-critical">Critical</span></td>
+                    <td class="finding"><strong>"John Lawson – Business Coach"</strong> — This is the wrong positioning. You are an AI Strategy Consultant and Futurist. Google is indexing and surfacing the wrong brand identity to every prospective client, event organizer, and media contact who searches your name.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Meta Description</span></td>
+                    <td><span class="badge badge-critical">Critical</span></td>
+                    <td class="finding"><strong>Missing entirely.</strong> Google is auto-generating your search snippet from page body copy, which currently reads: "He is the brains behind the best-selling social marketing book..." — referencing a 10-year-old book, not your current AI work. You have zero control over how you appear in search results right now.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">H1 Tag</span></td>
+                    <td><span class="badge badge-pass">Pass</span></td>
+                    <td class="finding">One H1 on the homepage: "Empowering Entrepreneurs with Strategic Clarity." Single H1, correctly structured.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">H2 Tags</span></td>
+                    <td><span class="badge badge-fail">Fail</span></td>
+                    <td class="finding">All H2 tags on the homepage are empty strings. Section headings exist visually but have no text content inside the HTML tags — invisible to search engines.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Open Graph Title</span></td>
+                    <td><span class="badge badge-critical">Critical</span></td>
+                    <td class="finding"><strong>OG Title is "Home 3"</strong> — a WordPress page template name that was never replaced. Every time your site gets shared on social media, the link preview title reads "Home 3." This is showing everywhere your URL is posted.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">About Page Content</span></td>
+                    <td><span class="badge badge-critical">Critical</span></td>
+                    <td class="finding"><strong>The /about/ page is filled with lorem ipsum placeholder text</strong> and is indexed by Google. The About Me page in the nav (/about-me/) has real content. The /about/ page does not — and Google is showing the lorem ipsum version in search results.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Privacy Policy</span></td>
+                    <td><span class="badge badge-critical">Critical</span></td>
+                    <td class="finding"><strong>Contains unfilled template placeholders:</strong> "[Your Company Name]" and "[website/application/service]" are live in the policy text. Indexed by Google. Legal and trust exposure.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Schema Markup</span></td>
+                    <td><span class="badge badge-warn">Warning</span></td>
+                    <td class="finding">Schema is present (Yoast SEO). However: (1) Person schema sameAs references <code>http://www.JohnLawson.com</code> — HTTP, not HTTPS. (2) Schema describes you as "Business Coach" not AI consultant. (3) Person and Organization types are combined on the same entity, which can confuse parsers.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">robots.txt</span></td>
+                    <td><span class="badge badge-warn">Warning</span></td>
+                    <td class="finding">Fully permissive — allows all crawlers to access all pages. The lorem ipsum /about/ page and unpopulated template pages are being freely crawled and indexed as a result.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Sitemap</span></td>
+                    <td><span class="badge badge-pass">Pass</span></td>
+                    <td class="finding">Sitemap present with 11 sub-sitemaps (Yoast SEO). Last modified March 4, 2026. Properly referenced in robots.txt.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Contact Info on Homepage</span></td>
+                    <td><span class="badge badge-fail">Fail</span></td>
+                    <td class="finding">No phone number or email visible on the homepage. Contact page has (678) 400-0580 — but this differs from the phone listed on Facebook: (888) 373-7612. NAP inconsistency.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Images Without Alt Text</span></td>
+                    <td><span class="badge badge-warn">Warning</span></td>
+                    <td class="finding">13 of 55 images on the homepage are missing alt text. Accessibility and SEO signal issue.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Blog Categories</span></td>
+                    <td><span class="badge badge-warn">Warning</span></td>
+                    <td class="finding">All blog posts are filed under "Uncategorized." No topic taxonomy — misses internal linking and topical authority opportunities.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Social Links on Homepage</span></td>
+                    <td><span class="badge badge-fail">Fail</span></td>
+                    <td class="finding">Homepage links only to LinkedIn — and three times. No links to Facebook, X (44.7K followers), Instagram, or YouTube. The footer has no social links at all.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- SECTION 3: CONTENT CONSISTENCY -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-num">3</div>
+            <h2 class="section-title">Content Consistency Audit</h2>
+        </div>
+
+        <table class="audit-table">
+            <thead>
+                <tr>
+                    <th style="width: 35%;">Signal</th>
+                    <th style="width: 15%;">Grade</th>
+                    <th>Detail</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="check-name">Blog Publishing Activity</span></td>
+                    <td><span class="badge badge-pass">Strong</span></td>
+                    <td class="finding">14 pages of blog posts. Last published March 4, 2026. Current series on Dream 100 strategy shows consistent, substantive content. This is the strongest content signal on the site.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Brand Positioning Consistency</span></td>
+                    <td><span class="badge badge-critical">Critical</span></td>
+                    <td class="finding">Title tag: "Business Coach." X bio: "Chief Marketer." Schema: "Business Coach." Homepage H1: "Strategic Clarity." Facebook bio: "keynote speaker & CEO of ColderICE Media." None of these reflect AI Strategy Consultant. Every channel is describing a different person doing different work.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Framework Visibility</span></td>
+                    <td><span class="badge badge-fail">Fail</span></td>
+                    <td class="finding">"People + AI = Power Moves" — your signature framework — appears nowhere on the homepage, the site title, the meta data, or the schema. Your most differentiating IP is invisible to search and to first-time visitors.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Offer Clarity</span></td>
+                    <td><span class="badge badge-warn">Warning</span></td>
+                    <td class="finding">AI Employee Intensive, TSP Mastermind, and AI Profit Lab are not surfaced on the homepage. "Work With Me" leads to a page — but the homepage CTA says "Work With John" with no specifics. Visitors don't know what they're buying.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Visual Brand Consistency</span></td>
+                    <td><span class="badge badge-warn">Warning</span></td>
+                    <td class="finding">Profile images vary across platforms. Facebook uses a professional photo; YouTube thumbnail style is inconsistent with current brand direction.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">YouTube Content Engagement</span></td>
+                    <td><span class="badge badge-warn">Warning</span></td>
+                    <td class="finding">500 videos, 2,470 subscribers. Recent videos averaging 12–35 views. Popular videos (100K–483K views) are 7–18 years old and unrelated to current positioning (whiteboard cleaning, phone tips). These are diluting brand identity on the channel.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">X / Twitter Activity</span></td>
+                    <td><span class="badge badge-warn">Warning</span></td>
+                    <td class="finding">44,700 followers and 98,300+ posts — strong authority signal. However, no recent posts were visible in the public feed at time of audit. If posting has paused, that audience is going cold on your highest-follower platform.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- SECTION 4: GOOGLE VISIBILITY -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-num">4</div>
+            <h2 class="section-title">Google Visibility</h2>
+        </div>
+
+        <table class="audit-table">
+            <thead>
+                <tr>
+                    <th style="width: 35%;">Check</th>
+                    <th style="width: 15%;">Status</th>
+                    <th>Finding</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="check-name">Brand Name Search</span></td>
+                    <td><span class="badge badge-pass">Pass</span></td>
+                    <td class="finding">Searching "John Lawson" returns johnlawson.com as the first organic result. You own your brand search.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Pages Indexed</span></td>
+                    <td><span class="badge badge-warn">Warning</span></td>
+                    <td class="finding">~71 pages indexed via site: search. This includes the lorem ipsum /about/ page, the Privacy Policy with placeholder text, and what appears to be unpopulated template pages. Low-quality pages dilute overall site authority.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Search Snippet</span></td>
+                    <td><span class="badge badge-fail">Fail</span></td>
+                    <td class="finding">No meta description means Google is pulling its own snippet — currently showing the old e-commerce/social commerce book reference, not your AI strategy work. You're getting described to prospects in a way you didn't choose and that's 10 years out of date.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Third-Party Mentions</span></td>
+                    <td><span class="badge badge-pass">Strong</span></td>
+                    <td class="finding">Strong off-site presence: Amazon author page, podcast appearances (MyWifeQuitHerJob, Startup Bros), Substack features, Google Books listing. Real authority signals outside the site.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">NAP Consistency</span></td>
+                    <td><span class="badge badge-fail">Fail</span></td>
+                    <td class="finding">Phone on Contact page: (678) 400-0580. Phone on Facebook: (888) 373-7612. Two different numbers across your primary web and social presence. Google uses NAP consistency to validate local business signals.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Knowledge Panel</span></td>
+                    <td><span class="badge badge-warn">Warning</span></td>
+                    <td class="finding">No Knowledge Panel triggered in search results. LinkedIn and Facebook profiles appear in search for your name, but no authoritative panel. Schema + sameAs data is present but the "Business Coach" positioning mismatch may be limiting consolidation.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Problematic Pages Indexed</span></td>
+                    <td><span class="badge badge-critical">Critical</span></td>
+                    <td class="finding">Google is actively serving the /about/ lorem ipsum page and Privacy Policy placeholder page in search results. These are the 3rd and 9th results for site:johnlawson.com. Anyone browsing your indexed pages will find them.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- SECTION 5: BRAND AUTHORITY SCORECARD -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-num">5</div>
+            <h2 class="section-title">Brand Authority Scorecard</h2>
+        </div>
+
+        <div class="eeat-grid">
+            <div class="eeat-card">
+                <div class="eeat-top">
+                    <div class="eeat-label">Presence</div>
+                    <div class="eeat-grade grade-b">B</div>
+                </div>
+                <div class="eeat-evidence">4 of 5 major platforms active. Combined following of 69,000+ across Facebook, LinkedIn, X, and Instagram. Strong off-site mentions on Amazon, podcasts, and Substack. Presence is real and substantial — it's just not connected or consistent.</div>
+            </div>
+            <div class="eeat-card">
+                <div class="eeat-top">
+                    <div class="eeat-label">Consistency</div>
+                    <div class="eeat-grade grade-d">D+</div>
+                </div>
+                <div class="eeat-evidence">Five different self-descriptions across five platforms. Title tag says "Business Coach." X says "Chief Marketer." Facebook says "keynote speaker & CEO." Homepage says "Strategic Clarity." The flagship framework "People + AI = Power Moves" appears nowhere online except in your own content.</div>
+            </div>
+            <div class="eeat-card">
+                <div class="eeat-top">
+                    <div class="eeat-label">Trust</div>
+                    <div class="eeat-grade grade-d">D</div>
+                </div>
+                <div class="eeat-evidence">HTTPS is good. But: lorem ipsum on a live indexed page, a Privacy Policy with "[Your Company Name]" placeholders, two different phone numbers across platforms, and an OG title reading "Home 3" all actively undercut trust with anyone who looks closely — including Google's quality evaluators.</div>
+            </div>
+            <div class="eeat-card">
+                <div class="eeat-top">
+                    <div class="eeat-label">Authority</div>
+                    <div class="eeat-grade grade-b">B-</div>
+                </div>
+                <div class="eeat-evidence">Real authority is here: $32M+ career sales, Amazon bestselling author, international speaker, 98K+ posts on X, podcast features, Google Books listing. The problem is none of this is organized or surfaced on the site itself. The authority exists — the website doesn't tell the story.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WHAT'S WORKING -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-num">✓</div>
+            <h2 class="section-title">What's Actually Working</h2>
+        </div>
+        <div class="working-grid">
+            <div class="working-item">
+                <strong>Blog Is Active and Substantive</strong>
+                <p>14 pages of posts, last published March 4, 2026. The Dream 100 series shows consistent, strategic content. This is your most solid web asset right now.</p>
+            </div>
+            <div class="working-item">
+                <strong>Social Audience Is Real and Large</strong>
+                <p>44.7K on X, 11.3K on LinkedIn, 10.5K on Facebook. That's a combined audience most businesses would pay serious money to build. It exists — it just needs to be activated.</p>
+            </div>
+            <div class="working-item">
+                <strong>Off-Site Authority Is Legitimate</strong>
+                <p>Amazon author page, podcast features, Substack articles, Google Books. The internet already validates who you are — your site just doesn't reflect it.</p>
+            </div>
+            <div class="working-item">
+                <strong>Facebook Is Active and Fully Set Up</strong>
+                <p>Posted 3 hours ago at time of audit. Page is complete with bio, phone, email, website link, and location. This is the model for how all your profiles should look.</p>
+            </div>
+            <div class="working-item">
+                <strong>Technical Foundation Is Solid</strong>
+                <p>HTTPS, Yoast SEO installed, sitemap in place, canonical tags present. The infrastructure is there. The content inside it is the problem.</p>
+            </div>
+            <div class="working-item">
+                <strong>Brand Name Search Returns the Site First</strong>
+                <p>You own "John Lawson" in Google. That's your floor. The ceiling is getting found for "AI strategy consultant" and "AI keynote speaker" — which requires fixing the positioning issues above.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ACTION PLAN -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-num">6</div>
+            <h2 class="section-title">Prioritized Action Plan</h2>
+        </div>
+
+        <div class="action-grid">
+            <div>
+                <div class="action-col-header">This Week — Stop the Bleeding</div>
+                <div class="action-item urgent">
+                    <strong>Fix or Noindex the /about/ Lorem Ipsum Page</strong>
+                    Either replace the placeholder content with real copy or add a noindex tag to prevent Google from serving gibberish to your visitors.
+                    <div class="action-impact" style="color: #b91c1c;">Impact: Critical &nbsp;|&nbsp; Effort: 30 min</div>
+                </div>
+                <div class="action-item urgent">
+                    <strong>Fix the Privacy Policy Placeholders</strong>
+                    Replace "[Your Company Name]" with "ColderICE Media" and fill all bracketed fields. This is a legal and trust issue, not just an SEO one.
+                    <div class="action-impact" style="color: #b91c1c;">Impact: Critical &nbsp;|&nbsp; Effort: 30 min</div>
+                </div>
+                <div class="action-item urgent">
+                    <strong>Fix the OG Title ("Home 3")</strong>
+                    In WordPress, go to the homepage, open Yoast SEO, and set the Social title to "John Lawson — AI Strategy Consultant &amp; Keynote Speaker." Every share of your URL is affected by this.
+                    <div class="action-impact" style="color: #b91c1c;">Impact: Critical &nbsp;|&nbsp; Effort: 10 min</div>
+                </div>
+                <div class="action-item">
+                    <strong>Write and Add a Meta Description</strong>
+                    One sentence. Example: "John Lawson is an AI Strategy Consultant, keynote speaker, and bestselling author helping business owners implement People + AI = Power Moves." Takes 5 minutes. Controls how you appear in every search result.
+                    <div class="action-impact" style="color: #b45309;">Impact: High &nbsp;|&nbsp; Effort: 10 min</div>
+                </div>
+            </div>
+            <div>
+                <div class="action-col-header">This Month — Fix the Foundation</div>
+                <div class="action-item">
+                    <strong>Update Title Tag to Reflect Real Positioning</strong>
+                    Change "John Lawson – Business Coach" to "John Lawson – AI Strategy Consultant &amp; Keynote Speaker" across the site title, schema, and all social bios.
+                    <div class="action-impact" style="color: #16a34a;">Impact: High &nbsp;|&nbsp; Effort: 1 hour</div>
+                </div>
+                <div class="action-item">
+                    <strong>Add All Social Links to Homepage &amp; Footer</strong>
+                    Facebook, X, Instagram, and YouTube should all be linked — not just LinkedIn three times. You're leaving 58,000+ followers disconnected from your website.
+                    <div class="action-impact" style="color: #b45309;">Impact: High &nbsp;|&nbsp; Effort: 30 min</div>
+                </div>
+                <div class="action-item">
+                    <strong>Unify the Phone Number Across All Platforms</strong>
+                    Pick one number — (678) 400-0580 or (888) 373-7612 — and make it consistent on the website, Facebook, schema, and Google Business Profile.
+                    <div class="action-impact" style="color: #b45309;">Impact: Medium &nbsp;|&nbsp; Effort: 1 hour</div>
+                </div>
+                <div class="action-item">
+                    <strong>Surface "People + AI = Power Moves" on Homepage</strong>
+                    Your signature framework belongs above the fold. It's the most distinctive thing you have and it's nowhere on your website.
+                    <div class="action-impact" style="color: #16a34a;">Impact: High &nbsp;|&nbsp; Effort: 2 hours</div>
+                </div>
+                <div class="action-item">
+                    <strong>Fix Empty H2 Tags</strong>
+                    Section headings on the homepage have no text inside the H2 tags. Add real headline copy to each section — it's both an SEO and conversion fix.
+                    <div class="action-impact" style="color: #b45309;">Impact: Medium &nbsp;|&nbsp; Effort: 1 hour</div>
+                </div>
+            </div>
+            <div>
+                <div class="action-col-header">This Quarter — Build the Asset</div>
+                <div class="action-item">
+                    <strong>Rewrite Homepage to Lead with AI Positioning</strong>
+                    The homepage currently reads like a generic business coach template. It should immediately communicate: AI strategy, People + AI = Power Moves, and the three offers (Intensive, Mastermind, Community).
+                    <div class="action-impact" style="color: #16a34a;">Impact: High &nbsp;|&nbsp; Effort: 1 week</div>
+                </div>
+                <div class="action-item">
+                    <strong>Categorize Blog Posts by Topic</strong>
+                    Move posts out of "Uncategorized" into topic clusters (AI Strategy, Sales, E-Commerce, Speaking). Builds topical authority and improves internal linking.
+                    <div class="action-impact" style="color: #b45309;">Impact: Medium &nbsp;|&nbsp; Effort: 2 hours</div>
+                </div>
+                <div class="action-item">
+                    <strong>Reactivate or Clean Up YouTube Channel</strong>
+                    500 videos with 12–35 views on recent content is a signal problem. Either build a consistent publishing cadence for the channel or consolidate it around your current AI content — and unlist the decade-old viral videos that confuse your brand positioning.
+                    <div class="action-impact" style="color: #b45309;">Impact: Medium &nbsp;|&nbsp; Effort: Ongoing</div>
+                </div>
+                <div class="action-item">
+                    <strong>Update Schema to Reflect Current Work</strong>
+                    Change "Business Coach" to "AI Strategy Consultant" in Yoast schema settings. Fix the sameAs HTTP URL to HTTPS. This is what feeds Google's Knowledge Graph.
+                    <div class="action-impact" style="color: #b45309;">Impact: Medium &nbsp;|&nbsp; Effort: 30 min</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-block">
+        <h2>The Content Is There.<br>The Consistency Isn't.</h2>
+        <p>John has the audience, the authority, and the content. What's missing is a consistent posting system that keeps every platform active and aligned. That's the one thing most experts let slip — and the one thing All Ways Posted handles end to end.</p>
+        <a href="#" class="cta-btn">Get 3 Free Posts — See What Consistent Looks Like</a>
+        <p style="margin-top: 1.25rem; font-size: 0.8rem; color: var(--slate-400);">allwaysposted.com &nbsp;·&nbsp; No commitment required</p>
+    </div>
+
+    <!-- DISCLAIMER -->
+    <div class="disclaimer">
+        <strong style="color: var(--slate-500);">About This Audit</strong><br>
+        This Brand Presence Audit was conducted March 28, 2026 using publicly available data — live site analysis via browser inspection, Google search operators (site:), social platform profile inspection, and HTML source review. No paid tools, third-party APIs, or private data sources were used. All findings reflect what is visible to any visitor, prospect, or search engine at the time of the audit. Data such as follower counts and post dates are point-in-time snapshots. Prepared by All Ways Posted as a complimentary service. This report does not constitute professional SEO, legal, or financial advice.
+    </div>
+
+</div>
+</div>
+</body>
+</html>

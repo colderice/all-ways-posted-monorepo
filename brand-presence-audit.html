@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brand Presence Audit | All Ways Posted</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #C4982E;
+            --gold-light: #E0B44C;
+            --gold-dark: #A67B1B;
+            --navy: #1E2B3C;
+            --navy-light: #2D3E55;
+            --navy-dark: #121B27;
+            --white: #FFFFFF;
+            --warm-gray: #F5F2EE;
+            --slate-100: #F1F5F9;
+            --slate-200: #E2E8F0;
+            --slate-300: #CBD5E1;
+            --slate-400: #94A3B8;
+            --slate-500: #64748B;
+            --font-heading: 'Barlow Condensed', sans-serif;
+            --font-body: 'DM Sans', sans-serif;
+            --grade-a: #22c55e;
+            --grade-b: #84cc16;
+            --grade-c: #eab308;
+            --grade-d: #f97316;
+            --grade-f: #ef4444;
+            --pass: #22c55e;
+            --warn: #eab308;
+            --fail: #ef4444;
+            --critical: #dc2626;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--warm-gray);
+            color: var(--navy);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: var(--font-heading);
+            text-transform: uppercase;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        /* ── LAYOUT ── */
+        .page { max-width: 960px; margin: 0 auto; padding: 0 2rem 4rem; }
+
+        /* ── HEADER ── */
+        .report-header {
+            background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 60%, #1a2f47 100%);
+            border-bottom: 3px solid var(--gold);
+            padding: 3rem 3rem 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .report-header::before {
+            content: '';
+            position: absolute;
+            top: -60px; right: -60px;
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(196,152,46,0.12) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 2.5rem;
+        }
+        .logo-area { display: flex; align-items: center; gap: 14px; }
+        .logo-area img { height: 48px; width: auto; }
+        .logo-text {
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            letter-spacing: 0.12em;
+            color: var(--white);
+            text-transform: uppercase;
+            font-weight: 800;
+        }
+        .report-badge {
+            background: rgba(196,152,46,0.15);
+            border: 1px solid rgba(196,152,46,0.4);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-family: var(--font-heading);
+            font-size: 0.8rem;
+            letter-spacing: 0.2em;
+            color: var(--gold-light);
+            text-transform: uppercase;
+        }
+        .report-title {
+            font-size: 3.5rem;
+            letter-spacing: 0.05em;
+            color: var(--white);
+            margin-bottom: 0.5rem;
+        }
+        .report-subtitle {
+            font-family: var(--font-body);
+            font-size: 1rem;
+            color: var(--slate-300);
+            font-weight: 400;
+        }
+        .client-meta {
+            display: flex;
+            gap: 3rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .meta-item label {
+            font-family: var(--font-heading);
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            color: var(--gold);
+            display: block;
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+        }
+        .meta-item span {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--white);
+        }
+
+        /* ── CONTENT SECTIONS ── */
+        .content { padding: 3rem 0; }
+        .section { margin-bottom: 3rem; }
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid rgba(196,152,46,0.3);
+        }
+        .section-num {
+            background: var(--gold);
+            color: var(--navy-dark);
+            font-family: var(--font-heading);
+            font-size: 1rem;
+            font-weight: 900;
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: 1.6rem;
+            letter-spacing: 0.05em;
+            color: var(--navy);
+        }
+
+        /* ── METRICS GRID ── */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+        .metric-card {
+            background: #FFFFFF;
+            border: 1px solid var(--slate-200);
+            border-radius: 12px;
+            padding: 1.5rem 1.25rem;
+            text-align: center;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        }
+        .metric-value {
+            font-family: var(--font-heading);
+            font-size: 2.4rem;
+            font-weight: 900;
+            color: var(--gold);
+            line-height: 1;
+            margin-bottom: 0.4rem;
+        }
+        .metric-value.pass { color: var(--pass); }
+        .metric-value.warn { color: var(--warn); }
+        .metric-value.fail { color: var(--fail); }
+        .metric-label {
+            font-size: 0.78rem;
+            color: var(--slate-500);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-family: var(--font-heading);
+        }
+
+        /* ── OVERALL SCORE ── */
+        .overall-score-bar {
+            background: #FFFFFF;
+            border: 1px solid var(--slate-200);
+            border-radius: 16px;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        }
+        .big-grade {
+            font-family: var(--font-heading);
+            font-size: 6rem;
+            font-weight: 900;
+            line-height: 1;
+            min-width: 100px;
+            text-align: center;
+        }
+        .grade-a { color: var(--grade-a); }
+        .grade-b { color: var(--grade-b); }
+        .grade-c { color: var(--grade-c); }
+        .grade-d { color: var(--grade-d); }
+        .grade-f { color: var(--grade-f); }
+        .score-breakdown { flex: 1; }
+        .score-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+        .score-label {
+            font-family: var(--font-heading);
+            font-size: 0.9rem;
+            letter-spacing: 0.08em;
+            color: var(--slate-500);
+            width: 200px;
+            flex-shrink: 0;
+        }
+        .score-bar-track {
+            flex: 1;
+            background: var(--slate-200);
+            border-radius: 50px;
+            height: 8px;
+            overflow: hidden;
+        }
+        .score-bar-fill {
+            height: 100%;
+            border-radius: 50px;
+            background: var(--gold);
+        }
+        .score-grade {
+            font-family: var(--font-heading);
+            font-size: 1rem;
+            font-weight: 900;
+            width: 28px;
+            text-align: right;
+        }
+
+        /* ── AUDIT TABLE ── */
+        .audit-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+        }
+        .audit-table th {
+            font-family: var(--font-heading);
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            color: var(--slate-500);
+            text-transform: uppercase;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-bottom: 2px solid var(--slate-200);
+            background: var(--slate-100);
+        }
+        .audit-table td {
+            padding: 0.9rem 1rem;
+            border-bottom: 1px solid var(--slate-100);
+            font-size: 0.9rem;
+            color: #475569;
+            vertical-align: top;
+            background: #FFFFFF;
+        }
+        .audit-table tr:last-child td { border-bottom: none; }
+        .audit-table tr:hover td { background: var(--slate-100); }
+        .check-name { color: var(--navy); font-weight: 600; }
+        .finding { color: var(--slate-500); font-size: 0.85rem; }
+
+        /* ── STATUS BADGES ── */
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.7rem;
+            border-radius: 50px;
+            font-family: var(--font-heading);
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+        .badge-pass { background: #dcfce7; color: #16a34a; border: 1px solid #bbf7d0; }
+        .badge-warn { background: #fef9c3; color: #b45309; border: 1px solid #fde68a; }
+        .badge-fail { background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; }
+        .badge-critical { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; font-weight: 900; }
+        .badge-na { background: var(--slate-100); color: var(--slate-500); border: 1px solid var(--slate-200); }
+
+        /* ── SOCIAL GRID ── */
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .social-card {
+            background: #FFFFFF;
+            border: 1px solid var(--slate-200);
+            border-radius: 12px;
+            padding: 1.25rem;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        }
+        .social-platform {
+            font-family: var(--font-heading);
+            font-size: 1rem;
+            letter-spacing: 0.08em;
+            color: var(--navy);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .platform-icon {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: var(--gold);
+        }
+        .social-stat { display: flex; justify-content: space-between; margin-bottom: 0.3rem; }
+        .social-stat-label { font-size: 0.8rem; color: var(--slate-500); }
+        .social-stat-value { font-size: 0.85rem; color: #475569; font-weight: 500; }
+
+        /* ── EEAT SCORECARD ── */
+        .eeat-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .eeat-card {
+            background: #FFFFFF;
+            border: 1px solid var(--slate-200);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        }
+        .eeat-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+        .eeat-label {
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            letter-spacing: 0.05em;
+            color: var(--gold);
+        }
+        .eeat-grade {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            font-weight: 900;
+            line-height: 1;
+        }
+        .eeat-evidence {
+            font-size: 0.82rem;
+            color: var(--slate-500);
+            line-height: 1.5;
+        }
+
+        /* ── ACTION PLAN ── */
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+        .action-col-header {
+            font-family: var(--font-heading);
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            color: var(--gold);
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid rgba(196,152,46,0.3);
+        }
+        .action-item {
+            background: #FFFFFF;
+            border: 1px solid var(--slate-200);
+            border-radius: 8px;
+            padding: 0.85rem 1rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.85rem;
+            color: var(--slate-500);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .action-item strong {
+            display: block;
+            color: var(--navy);
+            font-size: 0.9rem;
+            margin-bottom: 0.2rem;
+        }
+        .action-impact {
+            margin-top: 0.4rem;
+            font-size: 0.75rem;
+        }
+
+        /* ── CTA BLOCK ── */
+        .cta-block {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
+            border: 3px solid var(--gold);
+            border-radius: 16px;
+            padding: 2.5rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        .cta-block h2 {
+            font-size: 2.2rem;
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
+        .cta-block p {
+            color: var(--slate-300);
+            font-size: 1rem;
+            max-width: 560px;
+            margin: 0 auto 1.75rem;
+        }
+        .cta-btn {
+            display: inline-block;
+            background: var(--gold);
+            color: var(--navy-dark);
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            letter-spacing: 0.1em;
+            font-weight: 900;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+
+        /* ── WHAT'S WORKING ── */
+        .working-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        .working-item {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 10px;
+            padding: 1.1rem 1.25rem;
+        }
+        .working-item strong {
+            display: block;
+            color: #16a34a;
+            font-size: 0.9rem;
+            font-family: var(--font-heading);
+            letter-spacing: 0.05em;
+            margin-bottom: 0.3rem;
+        }
+        .working-item p { font-size: 0.85rem; color: #4b7a57; }
+
+        /* ── DISCLAIMER ── */
+        .disclaimer {
+            border-top: 1px solid var(--slate-200);
+            padding-top: 2rem;
+            margin-top: 3rem;
+            font-size: 0.75rem;
+            color: var(--slate-400);
+            line-height: 1.6;
+        }
+
+        /* ── PRINT ── */
+        @media print {
+            body { background: white; color: #1a1a1a; }
+            .report-header { background: #1E2B3C !important; -webkit-print-color-adjust: exact; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     HEADER
+══════════════════════════════════════════ -->
+<div class="report-header">
+    <div style="max-width: 960px; margin: 0 auto; padding: 0 2rem;">
+        <div class="header-top">
+            <div class="logo-area">
+                <img src="assets/AWP_Logo.png" alt="All Ways Posted">
+                <div class="logo-text">All Ways Posted</div>
+            </div>
+            <div class="report-badge">Brand Presence Audit</div>
+        </div>
+
+        <h1 class="report-title">Brand Presence<br>Audit Report</h1>
+        <p class="report-subtitle">A free analysis of your brand's online visibility — website health, social media presence, content consistency, and Google footprint.</p>
+
+        <div class="client-meta">
+            <div class="meta-item">
+                <label>Business</label>
+                <span><!-- CLIENT_NAME -->[Business Name]</span>
+            </div>
+            <div class="meta-item">
+                <label>Website</label>
+                <span><!-- CLIENT_URL -->[website.com]</span>
+            </div>
+            <div class="meta-item">
+                <label>Industry</label>
+                <span><!-- CLIENT_INDUSTRY -->[Industry]</span>
+            </div>
+            <div class="meta-item">
+                <label>Audit Date</label>
+                <span><!-- AUDIT_DATE -->[Date]</span>
+            </div>
+            <div class="meta-item">
+                <label>Prepared By</label>
+                <span>All Ways Posted</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     MAIN CONTENT
+══════════════════════════════════════════ -->
+<div class="page">
+<div class="content">
+
+
+    <!-- ── AT A GLANCE ── -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-num">★</div>
+            <h2 class="section-title">Key Findings at a Glance</h2>
+        </div>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value warn"><!-- OVERALL_SCORE -->C+</div>
+                <div class="metric-label">Overall Brand Score</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value fail"><!-- PLATFORMS_ACTIVE -->2/5</div>
+                <div class="metric-label">Active Social Platforms</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value fail"><!-- LAST_POST -->47 Days</div>
+                <div class="metric-label">Since Last Post</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value warn"><!-- TECH_ISSUES -->6</div>
+                <div class="metric-label">Technical Issues Found</div>
+            </div>
+        </div>
+
+        <!-- Overall Score Breakdown -->
+        <div class="overall-score-bar">
+            <div class="big-grade grade-c">C+</div>
+            <div class="score-breakdown">
+                <div style="font-family: var(--font-heading); font-size: 0.75rem; letter-spacing: 0.15em; color: var(--gold-dark); margin-bottom: 1rem; text-transform: uppercase;">Score Breakdown</div>
+                <div class="score-row">
+                    <div class="score-label">Social Media Presence</div>
+                    <div class="score-bar-track"><div class="score-bar-fill" style="width: 45%; background: var(--fail);"></div></div>
+                    <div class="score-grade grade-d">D</div>
+                </div>
+                <div class="score-row">
+                    <div class="score-label">Website Health</div>
+                    <div class="score-bar-track"><div class="score-bar-fill" style="width: 68%;"></div></div>
+                    <div class="score-grade grade-c">C+</div>
+                </div>
+                <div class="score-row">
+                    <div class="score-label">Content Consistency</div>
+                    <div class="score-bar-track"><div class="score-bar-fill" style="width: 30%; background: var(--fail);"></div></div>
+                    <div class="score-grade grade-f">D-</div>
+                </div>
+                <div class="score-row">
+                    <div class="score-label">Google Visibility</div>
+                    <div class="score-bar-track"><div class="score-bar-fill" style="width: 55%; background: var(--warn);"></div></div>
+                    <div class="score-grade grade-c">C</div>
+                </div>
+                <div class="score-row">
+                    <div class="score-label">Brand Consistency</div>
+                    <div class="score-bar-track"><div class="score-bar-fill" style="width: 50%; background: var(--warn);"></div></div>
+                    <div class="score-grade grade-c">C-</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ── SECTION 1: SOCIAL MEDIA ── -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-num">1</div>
+            <h2 class="section-title">Social Media Presence</h2>
+        </div>
+
+        <div class="social-grid">
+            <div class="social-card">
+                <div class="social-platform"><div class="platform-icon"></div>Facebook</div>
+                <div class="social-stat"><span class="social-stat-label">Profile Found</span><span class="social-stat-value"><span class="badge badge-pass">Yes</span></span></div>
+                <div class="social-stat"><span class="social-stat-label">Profile Complete</span><span class="social-stat-value"><span class="badge badge-warn">Partial</span></span></div>
+                <div class="social-stat"><span class="social-stat-label">Last Post</span><span class="social-stat-value">47 days ago</span></div>
+                <div class="social-stat"><span class="social-stat-label">Posting Frequency</span><span class="social-stat-value"><span class="badge badge-fail">Inactive</span></span></div>
+                <div class="social-stat"><span class="social-stat-label">Bio Links to Website</span><span class="social-stat-value"><span class="badge badge-pass">Yes</span></span></div>
+            </div>
+            <div class="social-card">
+                <div class="social-platform"><div class="platform-icon"></div>Instagram</div>
+                <div class="social-stat"><span class="social-stat-label">Profile Found</span><span class="social-stat-value"><span class="badge badge-pass">Yes</span></span></div>
+                <div class="social-stat"><span class="social-stat-label">Profile Complete</span><span class="social-stat-value"><span class="badge badge-fail">No</span></span></div>
+                <div class="social-stat"><span class="social-stat-label">Last Post</span><span class="social-stat-value">62 days ago</span></div>
+                <div class="social-stat"><span class="social-stat-label">Posting Frequency</span><span class="social-stat-value"><span class="badge badge-fail">Inactive</span></span></div>
+                <div class="social-stat"><span class="social-stat-label">Bio Links to Website</span><span class="social-stat-value"><span class="badge badge-fail">No</span></span></div>
+            </div>
+            <div class="social-card">
+                <div class="social-platform"><div class="platform-icon"></div>LinkedIn</div>
+                <div class="social-stat"><span class="social-stat-label">Profile Found</span><span class="social-stat-value"><span class="badge badge-warn">Unverified</span></span></div>
+                <div class="social-stat"><span class="social-stat-label">Profile Complete</span><span class="social-stat-value"><span class="badge badge-na">Unknown</span></span></div>
+                <div class="social-stat"><span class="social-stat-label">Last Post</span><span class="social-stat-value">Unknown</span></div>
+                <div class="social-stat"><span class="social-stat-label">Posting Frequency</span><span class="social-stat-value"><span class="badge badge-na">Unknown</span></span></div>
+                <div class="social-stat"><span class="social-stat-label">Bio Links to Website</span><span class="social-stat-value"><span class="badge badge-na">Unknown</span></span></div>
+            </div>
+            <div class="social-card">
+                <div class="social-platform"><div class="platform-icon"></div>X / Twitter</div>
+                <div class="social-stat"><span class="social-stat-label">Profile Found</span><span class="social-stat-value"><span class="badge badge-fail">No</span></span></div>
+                <div class="social-stat"><span class="social-stat-label">Profile Complete</span><span class="social-stat-value"><span class="badge badge-na">N/A</span></span></div>
+                <div class="social-stat"><span class="social-stat-label">Last Post</span><span class="social-stat-value">N/A</span></div>
+                <div class="social-stat"><span class="social-stat-label">Posting Frequency</span><span class="social-stat-value"><span class="badge badge-na">N/A</span></span></div>
+                <div class="social-stat"><span class="social-stat-label">Bio Links to Website</span><span class="social-stat-value"><span class="badge badge-na">N/A</span></span></div>
+            </div>
+            <div class="social-card">
+                <div class="social-platform"><div class="platform-icon"></div>TikTok</div>
+                <div class="social-stat"><span class="social-stat-label">Profile Found</span><span class="social-stat-value"><span class="badge badge-fail">No</span></span></div>
+                <div class="social-stat"><span class="social-stat-label">Profile Complete</span><span class="social-stat-value"><span class="badge badge-na">N/A</span></span></div>
+                <div class="social-stat"><span class="social-stat-label">Last Post</span><span class="social-stat-value">N/A</span></div>
+                <div class="social-stat"><span class="social-stat-label">Posting Frequency</span><span class="social-stat-value"><span class="badge badge-na">N/A</span></span></div>
+                <div class="social-stat"><span class="social-stat-label">Bio Links to Website</span><span class="social-stat-value"><span class="badge badge-na">N/A</span></span></div>
+            </div>
+            <div class="social-card" style="background: #fffbeb; border-color: #fde68a;">
+                <div class="social-platform" style="color: var(--gold-dark);">Summary</div>
+                <div class="social-stat"><span class="social-stat-label">Platforms Found</span><span class="social-stat-value">2 of 5</span></div>
+                <div class="social-stat"><span class="social-stat-label">Active Platforms</span><span class="social-stat-value" style="color: #dc2626;">0 of 5</span></div>
+                <div class="social-stat"><span class="social-stat-label">Avg. Days Since Post</span><span class="social-stat-value" style="color: #dc2626;">54 days</span></div>
+                <div class="social-stat"><span class="social-stat-label">Brand Consistency</span><span class="social-stat-value"><span class="badge badge-fail">Low</span></span></div>
+                <div class="social-stat" style="margin-top: 0.5rem;"><span class="social-stat-label">Overall Grade</span><span class="social-stat-value" style="font-family: var(--font-heading); font-size: 1.2rem; color: #dc2626; font-weight: 900;">D</span></div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ── SECTION 2: WEBSITE HEALTH ── -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-num">2</div>
+            <h2 class="section-title">Website Health Check</h2>
+        </div>
+
+        <table class="audit-table">
+            <thead>
+                <tr>
+                    <th style="width: 30%;">Check</th>
+                    <th style="width: 15%;">Status</th>
+                    <th>Finding</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="check-name">HTTPS / SSL</span></td>
+                    <td><span class="badge badge-pass">Pass</span></td>
+                    <td class="finding">Site loads securely over HTTPS. Certificate is valid.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Mobile Responsive</span></td>
+                    <td><span class="badge badge-pass">Pass</span></td>
+                    <td class="finding">Site adapts correctly on mobile devices.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Page Speed (Mobile)</span></td>
+                    <td><span class="badge badge-warn">Warning</span></td>
+                    <td class="finding">Google PageSpeed score: 54/100. Images are not compressed. Largest Contentful Paint is slow.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Page Speed (Desktop)</span></td>
+                    <td><span class="badge badge-pass">Pass</span></td>
+                    <td class="finding">Desktop score: 78/100. Acceptable performance.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Homepage H1 Tag</span></td>
+                    <td><span class="badge badge-fail">Fail</span></td>
+                    <td class="finding">Two H1 tags found on homepage. Only one is allowed. Confuses search engines about what the page is about.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Meta Description</span></td>
+                    <td><span class="badge badge-fail">Fail</span></td>
+                    <td class="finding">No meta description on homepage. Google will auto-generate one, usually poorly. You're missing control of your search snippet.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Title Tag</span></td>
+                    <td><span class="badge badge-warn">Warning</span></td>
+                    <td class="finding">Title tag present but generic. Does not include location or differentiator.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">robots.txt</span></td>
+                    <td><span class="badge badge-warn">Warning</span></td>
+                    <td class="finding">File exists but is fully permissive — no pages are restricted from crawling.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Sitemap</span></td>
+                    <td><span class="badge badge-pass">Pass</span></td>
+                    <td class="finding">Sitemap.xml found and accessible.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Contact Info Visible</span></td>
+                    <td><span class="badge badge-fail">Fail</span></td>
+                    <td class="finding">No phone number or address visible on homepage. Trust signal is missing.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Social Links in Footer</span></td>
+                    <td><span class="badge badge-warn">Warning</span></td>
+                    <td class="finding">Links present but point to platforms with inactive profiles.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Structured Data / Schema</span></td>
+                    <td><span class="badge badge-fail">Fail</span></td>
+                    <td class="finding">No LocalBusiness or Organization schema found. Google has no structured information about who you are.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+    <!-- ── SECTION 3: CONTENT CONSISTENCY ── -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-num">3</div>
+            <h2 class="section-title">Content Consistency Audit</h2>
+        </div>
+
+        <table class="audit-table">
+            <thead>
+                <tr>
+                    <th style="width: 35%;">Signal</th>
+                    <th style="width: 15%;">Grade</th>
+                    <th>Detail</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="check-name">Posting Frequency</span></td>
+                    <td><span class="badge badge-critical">Critical</span></td>
+                    <td class="finding">No posts across any platform in the last 47+ days. An inactive feed signals to prospects that the business may not be operational.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Brand Voice Consistency</span></td>
+                    <td><span class="badge badge-warn">Warning</span></td>
+                    <td class="finding">Tone and messaging differ between website copy and social bio. Website is professional; social bios are casual or incomplete.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Visual Branding Consistency</span></td>
+                    <td><span class="badge badge-warn">Warning</span></td>
+                    <td class="finding">Profile images vary across platforms. No consistent visual identity across channels.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Blog / Content Publishing</span></td>
+                    <td><span class="badge badge-fail">Fail</span></td>
+                    <td class="finding">No active blog or content hub found. Zero educational or long-form content being published.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Business Name Consistency</span></td>
+                    <td><span class="badge badge-pass">Pass</span></td>
+                    <td class="finding">Business name is consistent across website and profiles found.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">CTA Consistency</span></td>
+                    <td><span class="badge badge-fail">Fail</span></td>
+                    <td class="finding">Different calls-to-action across platforms. No unified next step for prospects to take.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+    <!-- ── SECTION 4: GOOGLE VISIBILITY ── -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-num">4</div>
+            <h2 class="section-title">Google Visibility</h2>
+        </div>
+
+        <table class="audit-table">
+            <thead>
+                <tr>
+                    <th style="width: 35%;">Check</th>
+                    <th style="width: 15%;">Status</th>
+                    <th>Finding</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="check-name">Google Business Profile</span></td>
+                    <td><span class="badge badge-warn">Warning</span></td>
+                    <td class="finding">Profile found but not fully claimed or optimized. Hours, services, and description are incomplete.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Google Reviews</span></td>
+                    <td><span class="badge badge-warn">Warning</span></td>
+                    <td class="finding">Fewer than 10 reviews found. Low review count limits local search visibility.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Brand Name Search Result</span></td>
+                    <td><span class="badge badge-pass">Pass</span></td>
+                    <td class="finding">Searching the business name returns the website as the first result.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Pages Indexed (site: search)</span></td>
+                    <td><span class="badge badge-warn">Warning</span></td>
+                    <td class="finding">Approximately 18 pages indexed. Limited content means limited search footprint.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">NAP Consistency</span></td>
+                    <td><span class="badge badge-fail">Fail</span></td>
+                    <td class="finding">Name, Address, and Phone number are inconsistent across website, GBP, and social profiles. This hurts local search rankings.</td>
+                </tr>
+                <tr>
+                    <td><span class="check-name">Knowledge Panel</span></td>
+                    <td><span class="badge badge-fail">Fail</span></td>
+                    <td class="finding">No Knowledge Panel triggered for brand search. Indicates low authority signals.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+    <!-- ── SECTION 5: BRAND AUTHORITY SCORECARD ── -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-num">5</div>
+            <h2 class="section-title">Brand Authority Scorecard</h2>
+        </div>
+
+        <div class="eeat-grid">
+            <div class="eeat-card">
+                <div class="eeat-top">
+                    <div class="eeat-label">Presence</div>
+                    <div class="eeat-grade grade-d">D</div>
+                </div>
+                <div class="eeat-evidence">Only 2 of 5 major social platforms active. No consistent posting cadence. Brand is effectively invisible to anyone not already looking for it by name.</div>
+            </div>
+            <div class="eeat-card">
+                <div class="eeat-top">
+                    <div class="eeat-label">Consistency</div>
+                    <div class="eeat-grade grade-d">D-</div>
+                </div>
+                <div class="eeat-evidence">47-day posting gap. No content calendar in evidence. Visual branding varies across platforms. Website and social messaging do not align.</div>
+            </div>
+            <div class="eeat-card">
+                <div class="eeat-top">
+                    <div class="eeat-label">Trust</div>
+                    <div class="eeat-grade grade-c">C-</div>
+                </div>
+                <div class="eeat-evidence">Website is HTTPS. Business name is searchable. But no contact info on homepage, fewer than 10 reviews, and inconsistent NAP data undercut credibility.</div>
+            </div>
+            <div class="eeat-card">
+                <div class="eeat-top">
+                    <div class="eeat-label">Authority</div>
+                    <div class="eeat-grade grade-c">C</div>
+                </div>
+                <div class="eeat-evidence">Business ranks for its own name. GBP exists. But no active content production, no Knowledge Panel, and low review count limit organic authority signals.</div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ── WHAT'S WORKING ── -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-num">✓</div>
+            <h2 class="section-title">What's Already Working</h2>
+        </div>
+        <div class="working-grid">
+            <div class="working-item">
+                <strong>Website Is Secure & Mobile-Ready</strong>
+                <p>HTTPS is active, site renders correctly on mobile. The technical foundation is solid.</p>
+            </div>
+            <div class="working-item">
+                <strong>Brand Name Is Searchable</strong>
+                <p>The business name returns the website as the first Google result. You own your brand search.</p>
+            </div>
+            <div class="working-item">
+                <strong>Facebook Profile Exists & Links to Website</strong>
+                <p>A foundation is in place. The profile just needs consistent activity to do its job.</p>
+            </div>
+            <div class="working-item">
+                <strong>Google Business Profile Is Claimed</strong>
+                <p>You're in the local ecosystem. With optimization and reviews, this becomes a major traffic driver.</p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ── ACTION PLAN ── -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-num">6</div>
+            <h2 class="section-title">Prioritized Action Plan</h2>
+        </div>
+
+        <div class="action-grid">
+            <div>
+                <div class="action-col-header">This Week</div>
+                <div class="action-item">
+                    <strong>Fix Duplicate H1 Tag</strong>
+                    Homepage has two H1 tags. Drop it to one clear headline.
+                    <div class="action-impact" style="color: #b45309;">Impact: Medium &nbsp;|&nbsp; Effort: 15 min</div>
+                </div>
+                <div class="action-item">
+                    <strong>Add Meta Description to Homepage</strong>
+                    Write one sentence that tells Google and humans what you do and where.
+                    <div class="action-impact" style="color: #b45309;">Impact: Medium &nbsp;|&nbsp; Effort: 20 min</div>
+                </div>
+                <div class="action-item">
+                    <strong>Complete Google Business Profile</strong>
+                    Add hours, services, description, and at least 5 photos.
+                    <div class="action-impact" style="color: #16a34a;">Impact: High &nbsp;|&nbsp; Effort: 1 hour</div>
+                </div>
+                <div class="action-item">
+                    <strong>Add Phone Number to Homepage</strong>
+                    Put it in the header. Visible, clickable, consistent with GBP.
+                    <div class="action-impact" style="color: #b45309;">Impact: Medium &nbsp;|&nbsp; Effort: 10 min</div>
+                </div>
+            </div>
+            <div>
+                <div class="action-col-header">This Month</div>
+                <div class="action-item">
+                    <strong>Establish a Posting Schedule</strong>
+                    Minimum 3x per week across your two active platforms. Consistency beats volume.
+                    <div class="action-impact" style="color: #16a34a;">Impact: High &nbsp;|&nbsp; Effort: Ongoing</div>
+                </div>
+                <div class="action-item">
+                    <strong>Unify Visual Branding Across Platforms</strong>
+                    Same profile photo, same cover image style, same bio format on every platform.
+                    <div class="action-impact" style="color: #b45309;">Impact: Medium &nbsp;|&nbsp; Effort: 2 hours</div>
+                </div>
+                <div class="action-item">
+                    <strong>Fix NAP Consistency</strong>
+                    Make sure your Name, Address, and Phone are identical everywhere — website, GBP, social.
+                    <div class="action-impact" style="color: #16a34a;">Impact: High &nbsp;|&nbsp; Effort: 1 hour</div>
+                </div>
+                <div class="action-item">
+                    <strong>Ask for 10 Google Reviews</strong>
+                    Email or text your best clients with a direct link to your review page.
+                    <div class="action-impact" style="color: #16a34a;">Impact: High &nbsp;|&nbsp; Effort: 2 hours</div>
+                </div>
+            </div>
+            <div>
+                <div class="action-col-header">This Quarter</div>
+                <div class="action-item">
+                    <strong>Add Schema Markup to Website</strong>
+                    LocalBusiness or Organization schema tells Google exactly who you are.
+                    <div class="action-impact" style="color: #b45309;">Impact: Medium &nbsp;|&nbsp; Effort: 2 hours</div>
+                </div>
+                <div class="action-item">
+                    <strong>Activate 2 More Platforms</strong>
+                    LinkedIn and one other based on where your audience spends time.
+                    <div class="action-impact" style="color: #16a34a;">Impact: High &nbsp;|&nbsp; Effort: Ongoing</div>
+                </div>
+                <div class="action-item">
+                    <strong>Start Publishing Content</strong>
+                    One piece of educational content per week — tip, insight, or answer to a common customer question.
+                    <div class="action-impact" style="color: #16a34a;">Impact: High &nbsp;|&nbsp; Effort: Ongoing</div>
+                </div>
+                <div class="action-item">
+                    <strong>Set Up Unified CTA Across All Channels</strong>
+                    One clear next step everywhere — book a call, claim a free audit, visit the site.
+                    <div class="action-impact" style="color: #b45309;">Impact: Medium &nbsp;|&nbsp; Effort: 3 hours</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ── CTA ── -->
+    <div class="cta-block">
+        <h2>The Problem Isn't Strategy.<br>It's Consistency.</h2>
+        <p>Most businesses know what they should post. They just don't have the systems to post it every week without it falling through the cracks. That's exactly what All Ways Posted handles — so your feed stays active and your brand stays visible, without it eating your time.</p>
+        <a href="#" class="cta-btn">Get 3 Free Posts — See What Consistent Looks Like</a>
+        <p style="margin-top: 1.25rem; font-size: 0.8rem; color: var(--slate-400);">allwaysposted.com &nbsp;·&nbsp; No commitment required</p>
+    </div>
+
+
+    <!-- ── DISCLAIMER ── -->
+    <div class="disclaimer">
+        <strong style="color: var(--slate-500);">About This Audit</strong><br>
+        This Brand Presence Audit is conducted using publicly available data — live site analysis, Google search, and social platform profile inspection. No paid tools or third-party data APIs were used. All findings reflect what is visible to any potential customer or search engine at the time of the audit. Metrics and conditions may change. This report is prepared by All Ways Posted as a complimentary service. It does not constitute professional SEO or legal advice.
+    </div>
+
+
+</div>
+</div>
+
+</body>
+</html>
