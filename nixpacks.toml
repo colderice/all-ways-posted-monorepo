@@ -8,4 +8,4 @@ cmds = ["cd audit-app && npm install"]
 cmds = ["cd audit-app && npm install"]
 
 [start]
-cmd = "cd audit-app && node server.js"
+cmd = "node audit-app/server.js"

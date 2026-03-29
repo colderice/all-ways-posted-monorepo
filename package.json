@@ -6,7 +6,7 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "start": "cd audit-app && node server.js",
+    "start": "node audit-app/server.js",
     "build": "cd audit-app && npm install"
   },
   "dependencies": {
