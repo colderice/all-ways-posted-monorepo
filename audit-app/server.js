@@ -148,6 +148,6 @@ app.get('/report/:id', (req, res) => {
   res.send(report.html);
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`AWP Audit Tool running on port ${PORT}`);
 });
